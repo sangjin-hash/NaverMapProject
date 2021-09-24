@@ -1,7 +1,9 @@
 package com.example.naverpractice;
 
 import android.content.Context;
+import android.graphics.PointF;
 import android.location.Location;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 
@@ -22,6 +24,8 @@ import com.naver.maps.map.UiSettings;
 import com.naver.maps.map.overlay.Align;
 import com.naver.maps.map.overlay.InfoWindow;
 import com.naver.maps.map.overlay.Marker;
+import com.naver.maps.map.overlay.Overlay;
+import com.naver.maps.map.overlay.PathOverlay;
 import com.naver.maps.map.util.FusedLocationSource;
 import com.naver.maps.map.widget.ZoomControlView;
 
@@ -35,7 +39,12 @@ public class MapFragmentActivity extends AppCompatActivity implements OnMapReady
     private FusedLocationSource locationSource;
     private NaverMap naverMap;
     private MapFragment mapFragment;
-    private double lat, lon;
+
+    private double src_lat, src_lon;
+    private double des_lat, des_lon;
+    private Marker marker1;
+
+    private PathOverlay path;
 
     //나중에 클라우드에서 데이터를 읽어와서 이 변수를 update해줘야 함.
     private int num_available = 0;
@@ -106,19 +115,19 @@ public class MapFragmentActivity extends AppCompatActivity implements OnMapReady
         naverMap.addOnLocationChangeListener(new NaverMap.OnLocationChangeListener() {
             @Override
             public void onLocationChange(Location location) {
-                lat = location.getLatitude();
-                lon = location.getLongitude();
-                CameraUpdate cameraUpdate = CameraUpdate.scrollTo(new LatLng(lat,lon)).animate(CameraAnimation.Easing, 3000);
+                src_lat = location.getLatitude();
+                src_lon = location.getLongitude();
+                CameraUpdate cameraUpdate = CameraUpdate.scrollTo(new LatLng(src_lat,src_lon)).animate(CameraAnimation.Easing, 3000);
                 naverMap.moveCamera(cameraUpdate);
 
                 GPSdistance gpsDistance = new GPSdistance();
-                boolean result = gpsDistance.isRange(lat, lon);
+                boolean result = gpsDistance.isRange(src_lat, src_lon);
                 if(result){
                     Log.d(TAG, "해당 현위치는 주차장 반경 200m 내에 속한다");
-                    Marker marker = new Marker();
-                    marker.setPosition(new LatLng(37.28476, 127.04425)); //팔달관 주차장 좌표
-                    marker.setMap(naverMap);
-                    marker.setMinZoom(14);
+                    Marker marker2 = new Marker();
+                    marker2.setPosition(new LatLng(37.28476, 127.04425)); //팔달관 주차장 좌표
+                    marker2.setMap(naverMap);
+                    marker2.setMinZoom(14);
                     InfoWindow infoWindow = new InfoWindow();
                     infoWindow.setAdapter(new InfoWindow.DefaultTextAdapter(MapFragmentActivity.this){
                         @NonNull
@@ -127,9 +136,60 @@ public class MapFragmentActivity extends AppCompatActivity implements OnMapReady
                             return num_available + "/" + num_entire;
                         }
                     });
-                    infoWindow.open(marker);
+                    infoWindow.open(marker2);
                 }
             }
         });
+
+        //Map Click Event 발생 시 해당 위치에 마커가 생성되고, 마커 위의 info를 Click하면 Navigation이 뜸.
+        InfoWindow naviInfo = new InfoWindow();
+        naviInfo.setAdapter(new InfoWindow.DefaultTextAdapter(this) {
+            @NonNull
+            @Override
+            public CharSequence getText(@NonNull InfoWindow infoWindow) {
+                return "이 위치로\n길찾기 시작";
+            }
+        });
+
+        naviInfo.setOnClickListener(new Overlay.OnClickListener() {
+            @Override
+            public boolean onClick(@NonNull Overlay overlay) {
+                if(path != null){
+                    path.setMap(null);
+                }
+                new NaverNaviApi().execute();
+                return false;
+            }
+        });
+
+        naverMap.setOnMapClickListener(new NaverMap.OnMapClickListener(){
+            @Override
+            public void onMapClick(@NonNull PointF pointF, @NonNull LatLng latLng) {
+                if(marker1 == null){
+                    marker1 = new Marker();
+                    marker1.setPosition(new LatLng(latLng.latitude, latLng.longitude));
+                    marker1.setMap(naverMap);
+                    naviInfo.open(marker1);
+                    des_lat = latLng.latitude;
+                    des_lon = latLng.longitude;
+                }
+                else{
+                    naviInfo.close();
+                    marker1.setMap(null);
+                    marker1 = null;
+                }
+            }
+        });
+    }
+
+    // todo: 길찾기 service 시작
+    //AsyncTask<Params, Progress, Result>
+    //execute -> doInBackground -> onProgressUpdate -> onPostExecute
+    class NaverNaviApi extends AsyncTask<Void,Integer, String> {
+
+        @Override
+        protected String doInBackground(Void... voids) {
+            return null;
+        }
     }
 }
