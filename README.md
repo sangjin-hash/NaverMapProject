@@ -17,3 +17,15 @@ navigation service가 시작됨
 - AsyncTask abstract class를 가지고 비동기식으로 동작하도록 구현한다. 
  
 - Background에서 Naver Direction API를 제공하는 URL에 접근하여 Retrofit을 통해 HTTP 
+
+### 9월 25일 기준 문제점...
+- Navigation.java의 클래스가 부정확하다 -> 더 연구해서 수정해야 될듯
+- Naver Cloud Platform의 Direction API는 호출이 되지만, AsyncTask의 doInBackground 내부에 Retrofit 객체를 만들고 호출이 발생할 때 onFailure 메소드로 접근하여 
+  
+      Expected BEGIN_ARRAY but was BEGIN_OBJECT at line 1 column 2 path $ 
+  
+  라는 error가 발생함.
+  
+- 이러한 문제점을 해결 못할 시 Retrofit을 사용하지 않고, clone 해온 Open Source를 참고하여 구현한다.
+
+    https://github.com/jeondoohyun/NaverMap_Directions
