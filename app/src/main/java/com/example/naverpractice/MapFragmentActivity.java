@@ -1,6 +1,5 @@
 package com.example.naverpractice;
 
-import android.content.Context;
 import android.graphics.PointF;
 import android.location.Location;
 import android.os.AsyncTask;
@@ -13,15 +12,12 @@ import androidx.fragment.app.FragmentManager;
 
 import com.naver.maps.geometry.LatLng;
 import com.naver.maps.map.CameraAnimation;
-import com.naver.maps.map.CameraPosition;
 import com.naver.maps.map.CameraUpdate;
 import com.naver.maps.map.LocationTrackingMode;
 import com.naver.maps.map.MapFragment;
 import com.naver.maps.map.NaverMap;
-import com.naver.maps.map.NaverMapOptions;
 import com.naver.maps.map.OnMapReadyCallback;
 import com.naver.maps.map.UiSettings;
-import com.naver.maps.map.overlay.Align;
 import com.naver.maps.map.overlay.InfoWindow;
 import com.naver.maps.map.overlay.Marker;
 import com.naver.maps.map.overlay.Overlay;
@@ -29,9 +25,15 @@ import com.naver.maps.map.overlay.PathOverlay;
 import com.naver.maps.map.util.FusedLocationSource;
 import com.naver.maps.map.widget.ZoomControlView;
 
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
 
 public class MapFragmentActivity extends AppCompatActivity implements OnMapReadyCallback {
     private static final int LOCATION_PERMISSION_REQUEST_CODE = 1000;
@@ -185,10 +187,32 @@ public class MapFragmentActivity extends AppCompatActivity implements OnMapReady
     // todo: 길찾기 service 시작
     //AsyncTask<Params, Progress, Result>
     //execute -> doInBackground -> onProgressUpdate -> onPostExecute
-    class NaverNaviApi extends AsyncTask<Void,Integer, String> {
+    class NaverNaviApi extends AsyncTask<Void ,Integer, String> {
 
         @Override
         protected String doInBackground(Void... voids) {
+            Retrofit retrofit = new Retrofit.Builder().baseUrl("https://naveropenapi.apigw.ntruss.com/map-direction/")
+                    .addConverterFactory(GsonConverterFactory.create())
+                    .build();
+
+            NaverApi naverApi = retrofit.create(NaverApi.class);
+
+            String start = src_lat +","+src_lon;
+            String goal = des_lat + "," + des_lon;
+            Call<List<Navigation>> call = naverApi.getPath("kkbsnszctg", "qt7KxFjrZJ6tvHYYScybMB6JpESkBcCUlc12VX5u",start,goal);
+
+            call.enqueue(new Callback<List<Navigation>>() {
+                @Override
+                public void onResponse(Call<List<Navigation>> call, Response<List<Navigation>> response) {
+                    Log.d(TAG, "Call Success");
+                }
+
+                @Override
+                public void onFailure(Call<List<Navigation>> call, Throwable t) {
+                    Log.e(TAG, "Call Failure");
+                    Log.e(TAG, t.getMessage());
+                }
+            });
             return null;
         }
     }
