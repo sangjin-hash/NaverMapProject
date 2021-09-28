@@ -30,18 +30,5 @@ public class GPSdistance {
             return dist;
         }
     }
-
-    public boolean isRange(double lat1, double lon1){
-        double lat2 = 37.28476;
-        double lon2 = 127.04425;
-        double dist;
-        dist = GetDistanceBetweenPoints(lat1, lon1, lat2, lon2);
-
-        if(dist>200){
-            return false;
-        }else{
-            return true;
-        }
-    }
 }
 

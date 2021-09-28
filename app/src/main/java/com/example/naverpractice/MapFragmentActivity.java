@@ -1,5 +1,6 @@
 package com.example.naverpractice;
 
+import android.content.Intent;
 import android.graphics.PointF;
 import android.location.Location;
 import android.os.AsyncTask;
@@ -25,6 +26,7 @@ import com.naver.maps.map.overlay.PathOverlay;
 import com.naver.maps.map.util.FusedLocationSource;
 import com.naver.maps.map.widget.ZoomControlView;
 
+import java.nio.channels.AsynchronousChannelGroup;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
@@ -44,6 +46,9 @@ public class MapFragmentActivity extends AppCompatActivity implements OnMapReady
 
     private double src_lat, src_lon;
     private double des_lat, des_lon;
+    private final double paldal_lat = 37.28476;
+    private final double paldal_lon = 127.04425;
+
     private Marker marker1;
 
     private PathOverlay path;
@@ -122,12 +127,13 @@ public class MapFragmentActivity extends AppCompatActivity implements OnMapReady
                 CameraUpdate cameraUpdate = CameraUpdate.scrollTo(new LatLng(src_lat,src_lon)).animate(CameraAnimation.Easing, 3000);
                 naverMap.moveCamera(cameraUpdate);
 
+                //팔달관 주차장 내에 들어왔을 때 마커 발생
                 GPSdistance gpsDistance = new GPSdistance();
-                boolean result = gpsDistance.isRange(src_lat, src_lon);
-                if(result){
+                double dist = gpsDistance.GetDistanceBetweenPoints(src_lat,src_lon, paldal_lat, paldal_lon);
+                Marker marker2 = new Marker();
+                if(dist < 200){
                     Log.d(TAG, "해당 현위치는 주차장 반경 200m 내에 속한다");
-                    Marker marker2 = new Marker();
-                    marker2.setPosition(new LatLng(37.28476, 127.04425)); //팔달관 주차장 좌표
+                    marker2.setPosition(new LatLng(paldal_lat, paldal_lon));
                     marker2.setMap(naverMap);
                     marker2.setMinZoom(14);
                     InfoWindow infoWindow = new InfoWindow();
@@ -140,6 +146,16 @@ public class MapFragmentActivity extends AppCompatActivity implements OnMapReady
                     });
                     infoWindow.open(marker2);
                 }
+
+                // todo: 현재는 팔달관 주차장 좌표에 따라 다음과 같이 구현하였으나 딥러닝 파트에서 차량이 들어오는 것을 탐지했을 때
+                //       bool type 변수가 true임을 전달하면, 서비스가 활성화되도록 하는 것이 더 좋을 듯.
+                if(dist < 50){
+                    Log.d(TAG, "Start Main Service");
+                    marker2.setMap(null);
+                    Intent intent = new Intent(MapFragmentActivity.this, MainServiceActvity.class);
+                    startActivity(intent);
+                }
+
             }
         });
 
@@ -159,7 +175,7 @@ public class MapFragmentActivity extends AppCompatActivity implements OnMapReady
                 if(path != null){
                     path.setMap(null);
                 }
-                new NaverNaviApi().execute();
+                //new NaverNaviApi().execute();
                 return false;
             }
         });
@@ -183,6 +199,16 @@ public class MapFragmentActivity extends AppCompatActivity implements OnMapReady
             }
         });
     }
+
+    // todo: Project Main Service -> AsyncTask or Thread(메인 스레드가 이 스레드가 다 돌아갈때까지 기다려야하면)
+    class MainService extends AsyncTask<Void, Void, Void>{
+
+        @Override
+        protected Void doInBackground(Void... voids) {
+            return null;
+        }
+    }
+
 
     // todo: 길찾기 service 시작
     //AsyncTask<Params, Progress, Result>
