@@ -17,3 +17,22 @@ navigation service가 시작됨
 - AsyncTask abstract class를 가지고 비동기식으로 동작하도록 구현한다. 
  
 - Background에서 Naver Direction API를 제공하는 URL에 접근하여 Retrofit을 통해 HTTP 
+
+### 9월 25일 기준 문제점...
+- Navigation.java의 클래스가 부정확하다 -> 더 연구해서 수정해야 될듯
+- Naver Cloud Platform의 Direction API는 호출이 되지만, AsyncTask의 doInBackground 내부에 Retrofit 객체를 만들고 호출이 발생할 때 onFailure 메소드로 접근하여 
+  
+      Expected BEGIN_ARRAY but was BEGIN_OBJECT at line 1 column 2 path $ 
+  
+  라는 error가 발생함.
+  
+- 이러한 문제점을 해결 못할 시 Retrofit을 사용하지 않고, clone 해온 Open Source를 참고하여 구현한다.
+
+    https://github.com/jeondoohyun/NaverMap_Directions
+    
+    
+    
+## 3. 지도교수님 Comment(9/27)
+- 위의 toy navigation app은 부가적인 기능이고, 본 프로젝트의 실질적인 main 서비스가 아니기 때문에 Deep Learning model을 통한 output에 대한 test case를 만들고 main service를 먼저 구현하도록 한다.
+- 위의 toy navigation app에서 발생한 문제는 안드로이드 sdk내에 있는 JSON 라이브러리를 이용해서 데이터를 받아오고 파싱한다.
+- 다음 회의까지 main service에 대한 prototype(1. 목적지 주차장에 진입했을 때 오버레이된 주차장 구조도가 zoomin된다 -> 2. 빈 자리에 대한 UI가 나타나도록 한다) 구현
