@@ -152,10 +152,11 @@ public class MapFragmentActivity extends AppCompatActivity implements OnMapReady
                 if(dist < 50){
                     Log.d(TAG, "Start Main Service");
                     marker2.setMap(null);
+
                     Intent intent = new Intent(MapFragmentActivity.this, MainServiceActvity.class);
                     startActivity(intent);
+                    //overridePendingTransition(R.anim.slide_right_enter, R.anim.slide_right_enter); <- 이부분 수정 필요
                 }
-
             }
         });
 
