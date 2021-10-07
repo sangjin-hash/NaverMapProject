@@ -43,6 +43,29 @@ navigation service가 시작됨
 - 기존의 Foreground에 있는 Toy Navigation App은 life cycle의 onPause() 상태에 있고, MainService를 담당하는 Activity가 Foreground로 오면서 parking_lot_activity.xml으로 전환.
 - ImageView 위에 빈자리 UI를 띄우기 위해 SurfaceView를 올려놓았고, SurfaceView의 Canvas를 통해 빈 자리에 대한 UI를 그린다.
 
-### 9월 30일 기준 문제점...
+### 9월 30일 기준 문제점...     => 해결(10/7)
 빈 자리 UI를 하나 띄우는 것은 가능하지만, Thread가 여러번 돌고 draw()를 여러번 호출한다고 했을 때 기존의 그렸던 UI는 지워지고, 마지막에 그려진 빈 자리 UI만 남음
 -> Canvas를 그대로 유지하면서 여러번 그리고 지우는 Action이 가능하게 구현 해야 한다(Canvas 객체를 생성했을 때 한번만 그리면 그 위에 중복으로 작업할 수 없음)
+
+### 위의 문제점 해결 방안 
+우선 9월 30일에 발생한 문제점을 해결하기 위해선 크게 두 가지 방법이 있다.
+
+#### 1. layout에 ImageView를 넣지 않고 별도의 View를 상속한 Java 클래스를 생성한 뒤, Bitmap과 getResources()를 통해 png파일을 불러와 Image를 생성한다. 그 이후 onDraw()와 invalidate()함수를 사용하여 화면을 갱신하는 방법
+
+#### 2. ImageView와 동일한 SurficeView를 최상단에 올려놓고 그 위에서 작업을 하는 방법 => 선택
+
+해결방안 2번을 선택한 이유는 다음과 같다.
+- UI update는 Cloud에서 REST API를 통해 지속적으로 통신을 하며 Data를 get해야 하고, UI update를 위해 별도의 Thread에서 지속적으로 반복 작업을 해야 update를 할 수 있다.
+- invalidate() 메소드는 Thread 내부에서 작동할 수 없다.
+
+View 클래스에 정의된 invalidate() 메소드를 호출하면, 해당 View 화면이 무효(invalid)가 되고, 안드로이드 logic은 현재의 View 상태를 반영하여 새로 갱신해준다. 
+그러나 본 프로젝트의 Evaluation을 정량화하여 평가할 때 Service time(UI update time)을 측정하기 때문에 Update Service Time을 줄이기 위해 UI Thread 내에서 통신을 하는 것이 아닌 별도의 Thread에서 통신을 함으로써 UI Thread에 Overloading을 하지 않고 ANR이 발생하지 않도록 하므로 Surfice View를 활용하였다. 
+
+
+
+## 4. Main Service Todo(10/7~
+#### 1. 촬영 범위 밖의 사각지대 영역을 제외한 모든 자리에 대해 Section을 나누고, Section 별 x, y 좌표에 대한 data structure 구성
+
+#### 2. 각 Section 별 제 자리에 UI가 뜨도록 구성
+
+#### 3. Navigation UI 생성(종료하기 -> 이전 Activity로 이동, 주차장 여석 정보  
