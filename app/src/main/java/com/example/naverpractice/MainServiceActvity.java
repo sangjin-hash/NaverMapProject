@@ -31,8 +31,7 @@ public class MainServiceActvity extends AppCompatActivity {
     private static final String TAG = "[MAIN SERVICE]";
     private static final int LOCATION_PERMISSION_REQUEST_CODE = 1000;
 
-    private static final int SECTION1_SIZE = 18;
-    private static final int SECTION2_SIZE = 24;
+    private static final int SECTION_SIZE = 180;
 
     private HashMap<Integer, Boolean> testCase1 = new HashMap<Integer, Boolean>();
 
@@ -88,134 +87,163 @@ public class MainServiceActvity extends AppCompatActivity {
         public void run() {
             Canvas canvas = holder.lockCanvas();
             init_testCase();
+
+            update_testCase1();
             draw(canvas);
             holder.unlockCanvasAndPost(canvas);
 
-            //SectionSize만 바꿔주면 됌
-            for (int i = 0; i < SECTION2_SIZE; i++) {
-                try {
-                    sleep(500);
-                    canvas = holder.lockCanvas();
-                    canvas.drawColor(Color.TRANSPARENT, PorterDuff.Mode.CLEAR);
-                    update_testCase(i);
-                    draw(canvas);
-                    holder.unlockCanvasAndPost(canvas);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
+            try {
+                sleep(3000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
             }
+
+            canvas = holder.lockCanvas();
+            canvas.drawColor(Color.TRANSPARENT, PorterDuff.Mode.CLEAR);
+            update_testCase2();
+            draw(canvas);
+            holder.unlockCanvasAndPost(canvas);
         }
 
         public void draw(Canvas canvas) {
             for (int i = 0; i < testCase1.size(); i++) {
-
-                /*제일 아래 1구역
-                if (testCase1.get(i) == false) {
-                    canvas.drawRect(432 + i * 23, 1010, 455 + i * 23, 1100, paint);
-                    Log.d(TAG, i + "번째 UI");
-                }*/
-
-                //2구역
-                if (testCase1.get(i) == false) {
-                    canvas.drawRect(432 + i * 23, 840, 455 + i * 23, 930, paint);
-                    Log.d(TAG, i + "번째 UI");
+                if(0<= i && i <= 14){
+                    if(!testCase1.get(i)) canvas.drawRect(17 + i * 23, 150, 40 + i * 23, 240, paint);
                 }
-
-                /*3구역
-                if (testCase1.get(i) == false) {
-                    canvas.drawRect(432 + i * 23, 660, 455 + i * 23, 750, paint);
-                    Log.d(TAG, i + "번째 UI");
-                }*/
-
-                /*4구역
-                if (testCase1.get(i) == false) {
-                    canvas.drawRect(432 + i * 23, 495, 455 + i * 23, 585, paint);
-                    Log.d(TAG, i + "번째 UI");
-                }*/
-
-                /*5구역
-                if (testCase1.get(i) == false) {
-                    canvas.drawRect(432 + i * 23, 315, 455 + i * 23, 405, paint);
-                    Log.d(TAG, i + "번째 UI");
-                }*/
-
-
-                /*6구역
-                if (testCase1.get(i) == false) {
-                    canvas.drawRect(409 + i * 23, 150, 431 + i * 23, 240, paint);
-                    Log.d(TAG, i + "번째 UI");
-                }*/
-
-
-                /*7구역
-                if (testCase1.get(i) == false) {
-                    canvas.drawRect(17 + i * 23, 150, 40 + i * 23, 240, paint);
-                    Log.d(TAG, i + "번째 UI");
-                }*/
-
-
-                /*8구역
-                if (testCase1.get(i) == false) {
-                    canvas.drawRect(63 + i * 23, 315, 86 + i * 23, 405, paint);
-                    Log.d(TAG, i + "번째 UI");
-                }*/
-
-
-                /*9구역
-                if (testCase1.get(i) == false) {
-                    canvas.drawRect(63 + i * 23, 495, 86 + i * 23, 585, paint);
-                    Log.d(TAG, i + "번째 UI");
-                }*/
-
-                /*10구역
-                if (testCase1.get(i) == false) {
-                    canvas.drawRect(40 + i * 23, 660, 63 + i * 23, 750, paint);
-                    Log.d(TAG, i + "번째 UI");
-                }*/
-
-                /*11구역
-                if (testCase1.get(i) == false) {
-                    canvas.drawRect(224 + i * 23, 660, 247 + i * 23, 750, paint);
-                    Log.d(TAG, i + "번째 UI");
-                }*/
-
-                /*12구역
-                if (testCase1.get(i) == false) {
-                    canvas.drawRect(224 + i * 23, 840, 247 + i * 23, 930, paint);
-                    Log.d(TAG, i + "번째 UI");
-                }*/
-
-                /*13구역
-                if (testCase1.get(i) == false) {
-                    canvas.drawRect(942 + i * 23, 495, 965 + i * 23, 585, paint);
-                    Log.d(TAG, i + "번째 UI");
-                }*/
-
-                /*14구역
-                if (testCase1.get(i) == false) {
-                    canvas.drawRect(942 + i * 23, 660, 965 + i * 23, 750, paint);
-                    Log.d(TAG, i + "번째 UI");
-                }*/
+                else if(15<=i && i<=38){
+                    if(!testCase1.get(i)) canvas.drawRect(409 + (i-15) * 23, 150, 431 + (i-15) * 23, 240, paint);
+                }
+                else if(39<=i && i<=50){
+                    if(!testCase1.get(i)) canvas.drawRect(63 + (i-39) * 23, 315, 86 + (i-39) * 23, 405, paint);
+                }
+                else if(51<=i && i<=69){
+                    if(!testCase1.get(i)) canvas.drawRect(432 + (i-51) * 23, 315, 455 + (i-51) * 23, 405, paint);
+                }
+                else if(70<=i && i<=81){
+                    if(!testCase1.get(i)) canvas.drawRect(63 + (i-70) * 23, 495, 86 + (i-70) * 23, 585, paint);
+                }
+                else if(82<=i && i<=100){
+                    if(!testCase1.get(i)) canvas.drawRect(432 + (i-82) * 23, 495, 455 + (i-82) * 23, 585, paint);
+                }
+                else if(101<=i && i<=105){
+                    if(!testCase1.get(i)) canvas.drawRect(942 + (i-101) * 23, 495, 965 + (i-101) * 23, 585, paint);
+                }
+                else if(106<=i && i<=110){
+                    if(!testCase1.get(i)) canvas.drawRect(40 + (i-106) * 23, 660, 63 + (i-106) * 23, 750, paint);
+                }
+                else if(111<=i && i<=115){
+                    if(!testCase1.get(i)) canvas.drawRect(224 + (i-111) * 23, 660, 247 + (i-111) * 23, 750, paint);
+                }
+                else if(116<=i && i<=134){
+                    if(!testCase1.get(i))  canvas.drawRect(432 + (i-116) * 23, 660, 455 + (i-116) * 23, 750, paint);
+                }
+                else if(135<=i && i<=137){
+                    if(!testCase1.get(i))  canvas.drawRect(942 + (i-135) * 23, 660, 965 + (i-135) * 23, 750, paint);
+                }
+                else if(138<=i && i<= 142){
+                    if(!testCase1.get(i)) canvas.drawRect(224 + (i-138) * 23, 840, 247 + (i-138) * 23, 930, paint);
+                }
+                else if(143<=i && i<=161){
+                    if(!testCase1.get(i)) canvas.drawRect(432 + (i-143) * 23, 840, 455 + (i-143) * 23, 930, paint);
+                }
+                else if(162<=i && i<=179){
+                    if(!testCase1.get(i))  canvas.drawRect(432 + (i-162) * 23, 1010, 455 + (i-162) * 23, 1100, paint);
+                }
             }
         }
     }
 
     public void init_testCase() {
         //마찬가지로 섹션사이즈만 바꿔주면댐
-        for (int i = 0; i < SECTION2_SIZE; i++) {
+        for (int i = 0; i < SECTION_SIZE; i++) {
             testCase1.put(i, true);
         }
     }
 
     // TODO : Retrofit을 통해 지속적으로 통신하여 GET 하며 좌석(0번~179번)에 대한 빈 자리 유무를 계속 update 해야 한다.
-    public void update_testCase(int i) {
-        if (i == 0) {
-            testCase1.put(i, false);
-        } else {
-            for (int k = 0; k < SECTION2_SIZE; k++) {
-                testCase1.put(k, true);
-                if (k == i) testCase1.put(k, false);
-            }
-        }
+
+    public void update_testCase1() {
+        testCase1.put(0, true);
+        testCase1.put(1, false);
+        testCase1.put(2, false);
+        testCase1.put(3, true);
+        testCase1.put(4, false);
+        testCase1.put(5, true);
+        testCase1.put(6, true);
+        testCase1.put(7, true);
+        testCase1.put(8, true);
+        testCase1.put(9, false);
+        testCase1.put(10, false);
+        testCase1.put(11, true);
+        testCase1.put(12, true);
+        testCase1.put(13, true);
+        testCase1.put(14, true);
+
+        testCase1.put(15, true);
+        testCase1.put(16, false);
+        testCase1.put(17, false);
+        testCase1.put(18, true);
+        testCase1.put(19, false);
+        testCase1.put(20, true);
+        testCase1.put(21, true);
+        testCase1.put(22, true);
+        testCase1.put(23, true);
+        testCase1.put(24, false);
+        testCase1.put(25, false);
+        testCase1.put(26, true);
+        testCase1.put(27, true);
+        testCase1.put(28, true);
+        testCase1.put(29, true);
+        testCase1.put(30, true);
+        testCase1.put(31, true);
+        testCase1.put(32, true);
+        testCase1.put(33, true);
+        testCase1.put(35, true);
+        testCase1.put(36, true);
+        testCase1.put(37, true);
+        testCase1.put(38, true);
     }
+
+    public void update_testCase2() {
+        testCase1.put(0, true);
+        testCase1.put(1, true);
+        testCase1.put(2, false);
+        testCase1.put(3, false);
+        testCase1.put(4, true);
+        testCase1.put(5, true);
+        testCase1.put(6, true);
+        testCase1.put(7, false);
+        testCase1.put(8, true);
+        testCase1.put(9, true);
+        testCase1.put(10, true);
+        testCase1.put(11, true);
+        testCase1.put(12, true);
+        testCase1.put(13, true);
+        testCase1.put(14, false);
+
+        testCase1.put(15, true);
+        testCase1.put(16, true);
+        testCase1.put(17, true);
+        testCase1.put(18, false);
+        testCase1.put(19, false);
+        testCase1.put(20, true);
+        testCase1.put(21, true);
+        testCase1.put(22, true);
+        testCase1.put(23, true);
+        testCase1.put(24, true);
+        testCase1.put(25, false);
+        testCase1.put(26, true);
+        testCase1.put(27, true);
+        testCase1.put(28, true);
+        testCase1.put(29, true);
+        testCase1.put(30, false);
+        testCase1.put(31, true);
+        testCase1.put(32, true);
+        testCase1.put(33, false);
+        testCase1.put(35, true);
+        testCase1.put(36, true);
+        testCase1.put(37, true);
+        testCase1.put(38, true);
+    }
+
 }
