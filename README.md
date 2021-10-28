@@ -74,3 +74,9 @@ View 클래스에 정의된 invalidate() 메소드를 호출하면, 해당 View 
 - 사용자의 위치에 따라 ImageView에서 UI(초록색 원)로 표시를 하였으나 가끔 위도와 경도가 이상치를 나올 경우를 제외하고, UI가 사라지는 경우가 발생하였다. 이에 따라 Debug를 통해 오류를 분석하여 코드를 수정할 계획 
 
 #### 5. 서버 구축이 완료된 이후(Rest API를 활용해 주차장 자리 여부 Json 데이터를 받아올 수 있을 때) Retrofit을 통해 update_testCase() Refactoring 하기
+
+
+### 10/28 문제점...
+- Main Service Todolist 의 4번 Rendering에서 문제점을 파악하기 위해 디버그 모드로 탐색해본 결과, MainService 스레드를 하나만 생성하였고 UI(Main) 스레드까지 총 두 개의 스레드로 이루어져야 하는데 디버그 모드에서는 총 3개의 스레드(Main, MainService Thread, 원인 모를 Thread)로 구성되어 있는 것을 확인하였다. Location에 대한 UI를 띄우는 thread가 Running 할 때, 원인 모를 Thread는 wait하고 있고, UI가 사라지는 시점에서는 wait하고 있던 Thread가 Running, Location Thread가 wait 하게 되는 문제점을 포착하였다. 
+- 이를 해결하기 위해 생각해낸 방법으로는 SingleThreadPool 혹은 Handler 부분 수정 총 두가지이고 최악의 경우 Thread가 아닌 AsyncTask 로 작업을 하는 구조로 Refactoring 할 계획이다.
+
