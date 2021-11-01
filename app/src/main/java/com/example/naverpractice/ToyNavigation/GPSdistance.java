@@ -1,4 +1,4 @@
-package com.example.naverpractice;
+package com.example.naverpractice.ToyNavigation;
 
 public class GPSdistance {
 

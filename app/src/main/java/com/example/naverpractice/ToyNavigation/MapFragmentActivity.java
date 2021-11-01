@@ -1,4 +1,4 @@
-package com.example.naverpractice;
+package com.example.naverpractice.ToyNavigation;
 
 import android.content.Intent;
 import android.graphics.PointF;
@@ -11,6 +11,8 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentManager;
 
+import com.example.naverpractice.MainService.MainServiceActvity;
+import com.example.naverpractice.R;
 import com.naver.maps.geometry.LatLng;
 import com.naver.maps.map.CameraAnimation;
 import com.naver.maps.map.CameraUpdate;
@@ -26,7 +28,6 @@ import com.naver.maps.map.overlay.PathOverlay;
 import com.naver.maps.map.util.FusedLocationSource;
 import com.naver.maps.map.widget.ZoomControlView;
 
-import java.nio.channels.AsynchronousChannelGroup;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;

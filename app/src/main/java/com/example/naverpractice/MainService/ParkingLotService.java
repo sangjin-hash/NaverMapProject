@@ -1,4 +1,4 @@
-package com.example.naverpractice;
+package com.example.naverpractice.MainService;
 
 import android.content.Context;
 import android.graphics.Canvas;

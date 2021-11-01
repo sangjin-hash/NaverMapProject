@@ -20,8 +20,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".MapFragmentActivity" />
-        <activity android:name=".MainServiceActvity" />
+        <activity android:name=".ToyNavigation.MapFragmentActivity" />
+        <activity android:name=".MainService.MainServiceActvity" />
 
         <meta-data
             android:name="com.naver.maps.map.CLIENT_ID"

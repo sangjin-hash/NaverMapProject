@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainServiceActvity">
+    tools:context=".MainService.MainServiceActvity">
 
     <FrameLayout
         android:id="@+id/layout"
@@ -17,12 +17,12 @@
             android:layout_height="480dp"
             android:src="@drawable/parkinglot"/>
 
-        <com.example.naverpractice.ParkingLotService
+        <com.example.naverpractice.MainService.ParkingLotService
             android:id="@+id/parkingLotService"
             android:layout_width="wrap_content"
             android:layout_height="480dp" />
 
-        <com.example.naverpractice.LocationService
+        <com.example.naverpractice.MainService.LocationService
             android:id="@+id/surfaceView"
             android:layout_width="match_parent"
             android:layout_height="480dp" />

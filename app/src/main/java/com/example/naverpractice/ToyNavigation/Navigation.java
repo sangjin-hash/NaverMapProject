@@ -1,4 +1,4 @@
-package com.example.naverpractice;
+package com.example.naverpractice.ToyNavigation;
 
 import com.google.gson.annotations.SerializedName;
 
