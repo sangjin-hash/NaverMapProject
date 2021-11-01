@@ -4,32 +4,38 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainServiceActvity"
-    android:id="@+id/relativeLayout">
+    tools:context=".MainServiceActvity">
 
-    <ImageView
-        android:id="@+id/parkingLot"
+    <FrameLayout
+        android:id="@+id/layout"
         android:layout_width="wrap_content"
-        android:layout_height = "480dp"
-        android:layout_centerInParent = "true"
-        android:layout_margin="0dp"
-        android:padding = "0dp"
-        android:src="@drawable/parkinglot"
-        android:adjustViewBounds="true"/>
+        android:layout_height= "480dp"
+        android:layout_centerInParent="true">
 
-    <SurfaceView
-        android:layout_width="match_parent"
-        android:layout_height="480dp"
-        android:layout_centerInParent = "true"
-        android:id="@+id/surfaceView"/>
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="480dp"
+            android:src="@drawable/parkinglot"/>
+
+        <com.example.naverpractice.ParkingLotService
+            android:id="@+id/parkingLotService"
+            android:layout_width="wrap_content"
+            android:layout_height="480dp" />
+
+        <com.example.naverpractice.LocationService
+            android:id="@+id/surfaceView"
+            android:layout_width="match_parent"
+            android:layout_height="480dp" />
+    </FrameLayout>
 
     <TextView
-        android:id="@+id/textView"
+        android:id="@+id/information"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="주차장 정보 : 0/150"
+        android:text="주차장 정보 : 0/180"
         android:textSize="30dp"
-        android:layout_below = "@+id/parkingLot"
+        android:layout_below = "@+id/layout"
         android:layout_alignParentRight="true"/>
+
 
 </RelativeLayout>
