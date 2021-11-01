@@ -63,9 +63,20 @@ View 클래스에 정의된 invalidate() 메소드를 호출하면, 해당 View 
 
 
 
-## 4. Main Service Todo(10/7~
-#### 1. 촬영 범위 밖의 사각지대 영역을 제외한 모든 자리에 대해 Section을 나누고, Section 별 x, y 좌표에 대한 data structure 구성
+## 4. Main Service Todolist(10/7~10/19)
+#### 1. 촬영 범위 밖의 사각지대 영역을 제외한 모든 자리에 대해 Section을 나누고, Section 별 x, y 좌표에 대한 data structure 구성 => 해결
 
-#### 2. 각 Section 별 제 자리에 UI가 뜨도록 구성
+#### 2. 각 Section 별 제 자리에 UI가 뜨도록 구성 => 해결
 
-#### 3. Navigation UI 생성(종료하기 -> 이전 Activity로 이동, 주차장 여석 정보  
+#### 3. Navigation UI 생성(주차장 여석 정보) => 해결
+
+#### 4. 사용자의 현위치를 받아와서 위도 경도를 ImageView의 x,y 좌표로 변환한 뒤(Linear Transform) ImageView 위에 Rendering하기 => 해결했으나 문제점 발생
+- 사용자의 위치에 따라 ImageView에서 UI(초록색 원)로 표시를 하였으나 가끔 위도와 경도가 이상치를 나올 경우를 제외하고, UI가 사라지는 경우가 발생하였다. 이에 따라 Debug를 통해 오류를 분석하여 코드를 수정할 계획 
+
+#### 5. 서버 구축이 완료된 이후(Rest API를 활용해 주차장 자리 여부 Json 데이터를 받아올 수 있을 때) Retrofit을 통해 update_testCase() Refactoring 하기
+
+
+### 10/28 문제점...
+- Main Service Todolist 의 4번 Rendering에서 문제점을 파악하기 위해 디버그 모드로 탐색해본 결과, MainService 스레드를 하나만 생성하였고 UI(Main) 스레드까지 총 두 개의 스레드로 이루어져야 하는데 디버그 모드에서는 총 3개의 스레드(Main, MainService Thread, 원인 모를 Thread)로 구성되어 있는 것을 확인하였다. Location에 대한 UI를 띄우는 thread가 Running 할 때, 원인 모를 Thread는 wait하고 있고, UI가 사라지는 시점에서는 wait하고 있던 Thread가 Running, Location Thread가 wait 하게 되는 문제점을 포착하였다. 
+- 이를 해결하기 위해 생각해낸 방법으로는 SingleThreadPool 혹은 Handler 부분 수정 총 두가지이고 최악의 경우 Thread가 아닌 AsyncTask 로 작업을 하는 구조로 Refactoring 할 계획이다.
+
