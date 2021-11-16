@@ -70,7 +70,7 @@ View 클래스에 정의된 invalidate() 메소드를 호출하면, 해당 View 
 
 #### 3. Navigation UI 생성(주차장 여석 정보) => 해결
 
-#### 4. 사용자의 현위치를 받아와서 위도 경도를 ImageView의 x,y 좌표로 변환한 뒤(Linear Transform) ImageView 위에 Rendering하기 => 해결했으나 문제점 발생
+#### 4. 사용자의 현위치를 받아와서 위도 경도를 ImageView의 x,y 좌표로 변환한 뒤(Linear Transform) ImageView 위에 Rendering하기 => 해결했으나 문제점 발생 => 11/1 부로 해결
 - 사용자의 위치에 따라 ImageView에서 UI(초록색 원)로 표시를 하였으나 가끔 위도와 경도가 이상치를 나올 경우를 제외하고, UI가 사라지는 경우가 발생하였다. 이에 따라 Debug를 통해 오류를 분석하여 코드를 수정할 계획 
 
 #### 5. 서버 구축이 완료된 이후(Rest API를 활용해 주차장 자리 여부 Json 데이터를 받아올 수 있을 때) Retrofit을 통해 update_testCase() Refactoring 하기
@@ -80,3 +80,30 @@ View 클래스에 정의된 invalidate() 메소드를 호출하면, 해당 View 
 - Main Service Todolist 의 4번 Rendering에서 문제점을 파악하기 위해 디버그 모드로 탐색해본 결과, MainService 스레드를 하나만 생성하였고 UI(Main) 스레드까지 총 두 개의 스레드로 이루어져야 하는데 디버그 모드에서는 총 3개의 스레드(Main, MainService Thread, 원인 모를 Thread)로 구성되어 있는 것을 확인하였다. Location에 대한 UI를 띄우는 thread가 Running 할 때, 원인 모를 Thread는 wait하고 있고, UI가 사라지는 시점에서는 wait하고 있던 Thread가 Running, Location Thread가 wait 하게 되는 문제점을 포착하였다. 
 - 이를 해결하기 위해 생각해낸 방법으로는 SingleThreadPool 혹은 Handler 부분 수정 총 두가지이고 최악의 경우 Thread가 아닌 AsyncTask 로 작업을 하는 구조로 Refactoring 할 계획이다.
 
+
+### 11/1 현황
+기존의 MainService를 담당하는 Activity의 구성은 다음과 같다. MainActivity에 LocationChangedEvent가 있고 이벤트 발생 시 해당 위치의 위도와 경도값을 Worker Thread의 handler에 전달하고, 이 위에 SurfaceView를 놓아서 Worker Thread에 Canvas가 빈자리 UI 를 나타내는 Service와 사용자 위치를 Tracking하는 UI를 그려주게 되는 형식이다. 기존 코드에서 SurfaceView의 Worker Thread 안에서는 
+
+    Canvas canvas = holder.lockCanvas();
+    draw(canvas);
+    holder.unlockCanvasAndPost();
+    
+형식으로 구현되어 있는데, Thread 안에는 invalidate()를 사용할 수 없기 때문에 Canvas를 lock & unlock하는 형식으로 invalidate를 할 수 있다. 그래서 위치가 변화되었을 때 Worker Thread의 Handler로 위도, 경도가 전달이 되서 사용자 Tracking UI와 빈자리 UI가 나타나는 형식이다. 
+
+
+
+![image](https://user-images.githubusercontent.com/77181865/139779240-562ab4ea-9ae8-4c6e-9e91-eb8fc40e152d.png)
+
+
+
+그러나 문제점으로 MainActivity의 Thread 구성은 SurfaceView에서 생성한 Worker Thread 1개와 Main Thread 총 2개로 구성되어 있는데 프로그램을 run할 때 Worker Thread가 하나 더 생기고, 추가로 생성된 Thread에는 아무런 데이터 값도 가지고 있지 않고 기존의 Worker Thread와 Switch 되면서 Tracking하는 UI가 화면에 Rendering 되지 않는 문제가 발생하였다. 그래서 테스트 해본 결과 UI가 반짝이는 현상, UI가 사라졌다가 불규칙적인 시간 이후 다시 생성이 되는 버그가 발생하였고 위의 두 서비스에 따라 Canvas를 분리한 구조로 Refactoring 하였다.
+
+
+
+![image](https://user-images.githubusercontent.com/77181865/139795125-0c76b2cf-7d9a-40ba-bce6-3e2ddc978816.png)
+
+
+
+변경된 구조는 다음과 같다. Custom View에서는 빈 자리 UI 서비스를 제공하는 Canvas가 있고 이는 View를 상속하기 때문에 onDraw() -> invalidate()로 Update가 가능하고, 
+SurfaceView에서는 Tracking UI가 이동하면서 Canvas에 그려져야 하기 때문에 SurfaceView로 구현하였고 lockCanvas -> draw() -> unlockCanvasAndPost 구조로 화면에 송출이 된다. 
+이와 같은 구조를 통해 위에서 발생한 버그를 모두 해결하였다. 
