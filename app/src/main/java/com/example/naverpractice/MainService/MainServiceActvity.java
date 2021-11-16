@@ -27,6 +27,8 @@ public class MainServiceActvity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.parking_lot_activity);
 
+
+
         final LocationManager lm = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         gpsLocationListener = new LocationListener() {
             @Override
