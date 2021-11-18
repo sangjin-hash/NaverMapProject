@@ -107,7 +107,7 @@ public class ParkingLotService extends View {
         @Override
         public void run() {
             init_seat();
-            while(true){
+            /*while(true){
                 update_seat();
                 invalidate();
 
@@ -116,14 +116,7 @@ public class ParkingLotService extends View {
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
-            }
-        }
-    }
-
-    class RecommandService extends Thread{
-        @Override
-        public void run() {
-
+            }*/
         }
     }
 
@@ -148,7 +141,7 @@ public class ParkingLotService extends View {
 
             @Override
             public void onFailure(Call<List<ParkingLot>> call, Throwable t) {
-                Log.e(TAG, "Connected Failed");
+                Log.e(TAG, t.getMessage());
             }
         });
     }

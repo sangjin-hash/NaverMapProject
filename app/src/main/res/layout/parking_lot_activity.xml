@@ -6,39 +6,56 @@
     android:layout_height="match_parent"
     tools:context=".MainService.MainServiceActvity">
 
+    <RadioGroup
+        android:id="@+id/recommand_service"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center">
+
+        <RadioButton
+            android:id = "@+id/near_park"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text = "가까운 곳 주차하기             "
+            android:textSize = "30sp"
+            android:textColor = "@drawable/selector_radio_text"
+            android:background="@drawable/selector_radio_button"
+            android:layout_gravity="left"
+            android:layout_marginLeft="10dp"
+            android:onClick="onRadioButtonClicked"/>
+
+        <RadioButton
+            android:id="@+id/empty_around"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text = "좌우 차량이 빈 곳 주차하기"
+            android:textSize = "30sp"
+            android:textColor = "@drawable/selector_radio_text"
+            android:background="@drawable/selector_radio_button"
+            android:layout_gravity="left"
+            android:layout_marginLeft="10dp"
+            android:onClick="onRadioButtonClicked"/>
+
+        <RadioButton
+            android:id="@+id/no_service"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text = "좌석추천 필요없음              "
+            android:textSize = "30sp"
+            android:textColor = "@drawable/selector_radio_text"
+            android:background="@drawable/selector_radio_button"
+            android:layout_gravity="left"
+            android:layout_marginLeft="10dp"
+            android:onClick="onRadioButtonClicked"/>
+    </RadioGroup>
+
+
+
     <FrameLayout
         android:id="@+id/layout"
         android:layout_width="wrap_content"
         android:layout_height= "480dp"
         android:layout_centerInParent="true">
-
-        <RadioGroup
-            android:id="@+id/recommand_service"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
-            <RadioButton
-                android:id = "@+id/near_park"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text = "가까운 곳 주차하기"
-                android:textSize = "32sp"/>
-
-            <RadioButton
-                android:id="@+id/empty_around"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text = "좌우 차량이 빈 곳 주차하기"
-                android:textSize = "32sp"/>
-
-            <RadioButton
-                android:id="@+id/no_service"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text = "좌석추천 필요없음"
-                android:textSize = "32sp"/>
-
-        </RadioGroup>
 
         <ImageView
             android:layout_width="wrap_content"
@@ -54,16 +71,17 @@
             android:id="@+id/surfaceView"
             android:layout_width="match_parent"
             android:layout_height="480dp" />
+
+        <com.example.naverpractice.MainService.RecommendService
+            android:id="@+id/recommendService"
+            android:layout_width="wrap_content"
+            android:layout_height="480dp" />
     </FrameLayout>
 
-    <TextView
-        android:id="@+id/information"
-        android:layout_width="wrap_content"
+    <FrameLayout
+        android:id = "@+id/info_frame"
+        android:layout_width ="wrap_content"
         android:layout_height="wrap_content"
-        android:text="주차장 정보 : 0/180"
-        android:textSize="30dp"
-        android:layout_below = "@+id/layout"
-        android:layout_alignParentRight="true"/>
-
-
+        android:layout_centerInParent="true"
+        android:layout_below ="@+id/layout" />
 </RelativeLayout>
