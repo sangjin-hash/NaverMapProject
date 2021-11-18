@@ -73,7 +73,7 @@ View 클래스에 정의된 invalidate() 메소드를 호출하면, 해당 View 
 #### 4. 사용자의 현위치를 받아와서 위도 경도를 ImageView의 x,y 좌표로 변환한 뒤(Linear Transform) ImageView 위에 Rendering하기 => 해결했으나 문제점 발생 => 11/1 부로 해결
 - 사용자의 위치에 따라 ImageView에서 UI(초록색 원)로 표시를 하였으나 가끔 위도와 경도가 이상치를 나올 경우를 제외하고, UI가 사라지는 경우가 발생하였다. 이에 따라 Debug를 통해 오류를 분석하여 코드를 수정할 계획 
 
-#### 5. 서버 구축이 완료된 이후(Rest API를 활용해 주차장 자리 여부 Json 데이터를 받아올 수 있을 때) Retrofit을 통해 update_testCase() Refactoring 하기
+#### 5. 서버 구축이 완료된 이후(Rest API를 활용해 주차장 자리 여부 Json 데이터를 받아올 수 있을 때) Retrofit을 통해 update_testCase() Refactoring 하기 => 11/12 부로 해결
 
 
 ### 10/28 문제점...
@@ -107,3 +107,10 @@ View 클래스에 정의된 invalidate() 메소드를 호출하면, 해당 View 
 변경된 구조는 다음과 같다. Custom View에서는 빈 자리 UI 서비스를 제공하는 Canvas가 있고 이는 View를 상속하기 때문에 onDraw() -> invalidate()로 Update가 가능하고, 
 SurfaceView에서는 Tracking UI가 이동하면서 Canvas에 그려져야 하기 때문에 SurfaceView로 구현하였고 lockCanvas -> draw() -> unlockCanvasAndPost 구조로 화면에 송출이 된다. 
 이와 같은 구조를 통해 위에서 발생한 버그를 모두 해결하였다. 
+
+
+
+
+
+### 11/15 현황 
+메인서비스 측 구현은 모두 완성하였고, 메인 서비스에 부가서비스를 추가하여 좀 더 기능을 확장시킬 계획이다. => 추천 좌석 경로 제시
