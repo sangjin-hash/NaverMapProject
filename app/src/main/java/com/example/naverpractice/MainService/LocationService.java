@@ -15,7 +15,7 @@ import androidx.annotation.NonNull;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
-public class LocationService extends SurfaceView implements SurfaceHolder.Callback{
+public class LocationService extends SurfaceView implements SurfaceHolder.Callback {
     private static final String TAG = "[LocationService]";
     SurfaceHolder mHolder;
     RenderingThread mRThread;
@@ -53,13 +53,13 @@ public class LocationService extends SurfaceView implements SurfaceHolder.Callba
 
     }
 
-    class RenderingThread extends Thread{
+    class RenderingThread extends Thread {
         private SurfaceHolder holder;
         private Paint paint;
         private Canvas canvas;
         private double latitude, longitude;
 
-        public RenderingThread(SurfaceHolder holder){
+        public RenderingThread(SurfaceHolder holder) {
             this.holder = holder;
             holder.setFormat(PixelFormat.TRANSPARENT);
             paint = new Paint();
@@ -67,10 +67,11 @@ public class LocationService extends SurfaceView implements SurfaceHolder.Callba
 
             EventBus.getDefault().register(this);
         }
+
         @Override
         public void run() {
-            while(true){
-                if(latitude != 0 && longitude != 0) {
+            while (true) {
+                if (latitude != 0 && longitude != 0) {
                     canvas = holder.lockCanvas();
                     canvas.drawColor(Color.TRANSPARENT, PorterDuff.Mode.CLEAR);
                     int transformX = GpsToImageX(longitude);
@@ -83,7 +84,7 @@ public class LocationService extends SurfaceView implements SurfaceHolder.Callba
 
         //EventBus에서 보낸 이벤트를 수신하는 콜백 메서드
         @Subscribe
-        public void onLocationEvent(MainServiceActvity.LocationEvent event){
+        public void onLocationEvent(MainServiceActvity.LocationEvent event) {
             latitude = event.latitude;
             longitude = event.longitude;
         }
@@ -99,6 +100,7 @@ public class LocationService extends SurfaceView implements SurfaceHolder.Callba
             double b2 = width1 - (a2 * lon1);
 
             int width = (int) ((a2 * longitude) + b2);
+            width = tuning_X(width);
             return width;
         }
 
@@ -113,7 +115,52 @@ public class LocationService extends SurfaceView implements SurfaceHolder.Callba
             double b1 = height1 - (a1 * lat1);
 
             int height = (int) ((a1 * latitude) + b1);
+            height = tuning_Y(height);
             return height;
+        }
+
+        public int tuning_X(int width) {
+            int tuning_X = 0;
+
+            if (-100 <= width && width <= 63) {
+                tuning_X = 40;
+                return tuning_X;
+            } else if (63 < width && width <= 362) {
+                return width;
+            } else if (362 < width && width <= 409) {
+                tuning_X = 386;
+                return tuning_X;
+            } else if (409 < width && width <= 873) {
+                return width;
+            } else if (873 < width && width <= 942) {
+                tuning_X = 907;
+                return tuning_X;
+            } else if (942 < width && width < 1100) {
+                return width;
+            }
+            return tuning_X;
+        }
+
+        public int tuning_Y(int height) {
+            int tuning_Y = 0;
+
+            if (150 <= height && height <= 315) {
+                tuning_Y = 278;
+                return tuning_Y;
+            } else if (315 < height && height <= 585) {
+                return height;
+            } else if (585 < height && height <= 660) {
+                tuning_Y = 623;
+                return tuning_Y;
+            } else if (660 < height && height <= 930) {
+                return height;
+            } else if (930 < height && height <= 1010) {
+                tuning_Y = 970;
+                return tuning_Y;
+            } else if (1010 < height && height < 1100) {
+                return height;
+            }
+            return tuning_Y;
         }
     }
 }
