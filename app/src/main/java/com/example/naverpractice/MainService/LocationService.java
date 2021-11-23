@@ -58,6 +58,9 @@ public class LocationService extends SurfaceView implements SurfaceHolder.Callba
         private Paint paint;
         private Canvas canvas;
         private double latitude, longitude;
+        private WhichNode whichNode;
+        private TransformCoordinate transformCoordinate;
+        private int node;
 
         public RenderingThread(SurfaceHolder holder) {
             this.holder = holder;
@@ -66,6 +69,8 @@ public class LocationService extends SurfaceView implements SurfaceHolder.Callba
             paint.setColor(Color.GREEN);
 
             EventBus.getDefault().register(this);
+            whichNode = new WhichNode();
+            transformCoordinate = new TransformCoordinate();
         }
 
         @Override
@@ -74,9 +79,16 @@ public class LocationService extends SurfaceView implements SurfaceHolder.Callba
                 if (latitude != 0 && longitude != 0) {
                     canvas = holder.lockCanvas();
                     canvas.drawColor(Color.TRANSPARENT, PorterDuff.Mode.CLEAR);
-                    int transformX = GpsToImageX(longitude);
-                    int transformY = GpsToImageY(latitude);
-                    canvas.drawCircle(transformX, transformY, 15.0f, paint);
+                    int temp_transformX = GpsToImageX(longitude);
+                    int temp_transformY = GpsToImageY(latitude);
+
+                    node = whichNode.setNode(temp_transformX,temp_transformY);
+                    if(node != -1){
+                        transformCoordinate.transForm(temp_transformX, temp_transformY, node);
+                        int transformX = transformCoordinate.getTransformX();
+                        int transformY = transformCoordinate.getTransformY();
+                        canvas.drawCircle(transformX, transformY, 15.0f, paint);
+                    }
                     holder.unlockCanvasAndPost(canvas);
                 }
             }
@@ -100,7 +112,6 @@ public class LocationService extends SurfaceView implements SurfaceHolder.Callba
             double b2 = width1 - (a2 * lon1);
 
             int width = (int) ((a2 * longitude) + b2);
-            width = tuning_X(width);
             return width;
         }
 
@@ -115,52 +126,7 @@ public class LocationService extends SurfaceView implements SurfaceHolder.Callba
             double b1 = height1 - (a1 * lat1);
 
             int height = (int) ((a1 * latitude) + b1);
-            height = tuning_Y(height);
             return height;
-        }
-
-        public int tuning_X(int width) {
-            int tuning_X = 0;
-
-            if (-100 <= width && width <= 63) {
-                tuning_X = 40;
-                return tuning_X;
-            } else if (63 < width && width <= 362) {
-                return width;
-            } else if (362 < width && width <= 409) {
-                tuning_X = 386;
-                return tuning_X;
-            } else if (409 < width && width <= 873) {
-                return width;
-            } else if (873 < width && width <= 942) {
-                tuning_X = 907;
-                return tuning_X;
-            } else if (942 < width && width < 1100) {
-                return width;
-            }
-            return tuning_X;
-        }
-
-        public int tuning_Y(int height) {
-            int tuning_Y = 0;
-
-            if (150 <= height && height <= 315) {
-                tuning_Y = 278;
-                return tuning_Y;
-            } else if (315 < height && height <= 585) {
-                return height;
-            } else if (585 < height && height <= 660) {
-                tuning_Y = 623;
-                return tuning_Y;
-            } else if (660 < height && height <= 930) {
-                return height;
-            } else if (930 < height && height <= 1010) {
-                tuning_Y = 970;
-                return tuning_Y;
-            } else if (1010 < height && height < 1100) {
-                return height;
-            }
-            return tuning_Y;
         }
     }
 }
