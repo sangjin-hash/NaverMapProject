@@ -21,6 +21,7 @@ public class TransformCoordinate {
 
     public void transForm(int x, int y, int node){
         if(node == 0 || node == 4 || node == 6){
+            if(x < 17) x = 17;
             if(y < 275) y = 275;
             setTransformX(x);
             setTransformY(y);
@@ -49,6 +50,7 @@ public class TransformCoordinate {
         }
         else if(node == 10){
             if(623< y) y = 623;
+            if(x < 17) x = 17;
             setTransformX(x);
             setTransformY(y);
         }

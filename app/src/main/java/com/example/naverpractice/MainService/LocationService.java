@@ -12,8 +12,12 @@ import android.view.SurfaceView;
 
 import androidx.annotation.NonNull;
 
+import com.example.naverpractice.MainActivity;
+
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
+
+import java.util.ArrayList;
 
 public class LocationService extends SurfaceView implements SurfaceHolder.Callback {
     private static final String TAG = "[LocationService]";
@@ -58,9 +62,15 @@ public class LocationService extends SurfaceView implements SurfaceHolder.Callba
         private Paint paint;
         private Canvas canvas;
         private double latitude, longitude;
+
         private WhichNode whichNode;
         private TransformCoordinate transformCoordinate;
+        private RecordNode recordNode;
+
         private int node;
+        private boolean isDraw;
+        private ArrayList<PreviousNode> previous = new ArrayList<PreviousNode>();
+
 
         public RenderingThread(SurfaceHolder holder) {
             this.holder = holder;
@@ -71,6 +81,7 @@ public class LocationService extends SurfaceView implements SurfaceHolder.Callba
             EventBus.getDefault().register(this);
             whichNode = new WhichNode();
             transformCoordinate = new TransformCoordinate();
+            recordNode = new RecordNode();
         }
 
         @Override
@@ -82,12 +93,24 @@ public class LocationService extends SurfaceView implements SurfaceHolder.Callba
                     int temp_transformX = GpsToImageX(longitude);
                     int temp_transformY = GpsToImageY(latitude);
 
-                    node = whichNode.setNode(temp_transformX,temp_transformY);
-                    if(node != -1){
-                        transformCoordinate.transForm(temp_transformX, temp_transformY, node);
-                        int transformX = transformCoordinate.getTransformX();
-                        int transformY = transformCoordinate.getTransformY();
-                        canvas.drawCircle(transformX, transformY, 15.0f, paint);
+                    node = whichNode.setNode(temp_transformX, temp_transformY);
+
+                    if (node != -1) {
+                        isDraw = recordNode.record(node);
+                        if(isDraw){
+                            transformCoordinate.transForm(temp_transformX, temp_transformY, node);
+                            int transformX = transformCoordinate.getTransformX();
+                            int transformY = transformCoordinate.getTransformY();
+                            if(previous.size() == 0){
+                                PreviousNode pn = new PreviousNode(transformX, transformY, node);
+                                previous.add(0, pn);
+                            }else{
+                                previous.remove(0);
+                                PreviousNode pn = new PreviousNode(transformX, transformY, node);
+                                previous.add(0, pn);
+                            }
+                        }
+                        canvas.drawCircle(previous.get(0).getX(), previous.get(0).getY(), 15.0f, paint);
                     }
                     holder.unlockCanvasAndPost(canvas);
                 }
