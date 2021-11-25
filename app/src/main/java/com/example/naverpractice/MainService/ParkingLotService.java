@@ -107,7 +107,7 @@ public class ParkingLotService extends View {
         @Override
         public void run() {
             init_seat();
-            /*while(true){
+            while(true){
                 update_seat();
                 invalidate();
 
@@ -116,7 +116,7 @@ public class ParkingLotService extends View {
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
-            }*/
+            }
         }
     }
 

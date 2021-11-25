@@ -27,7 +27,7 @@ import retrofit2.Response;
 public class InformationFragment extends Fragment {
 
     private FragInfoBinding mBinding;
-    private final int SECTION_SIZE= 18;
+    private final int SECTION_SIZE= 180;
     private final String TAG = "[INFO]";
     private Handler mHandler = new Handler();
 

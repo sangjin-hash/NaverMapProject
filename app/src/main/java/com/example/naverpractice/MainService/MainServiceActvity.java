@@ -75,16 +75,9 @@ public class MainServiceActvity extends AppCompatActivity {
                 break;
         }
 
-        RadioButtonEvent event2 = new RadioButtonEvent();
-        event2.flag = flag;
-        EventBus.getDefault().post(event2);
     }
 
     public static class LocationEvent{
         double latitude, longitude;
-    }
-
-    public static class RadioButtonEvent{
-        int flag;
     }
 }
