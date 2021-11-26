@@ -7,7 +7,8 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 public class ApiClient {
-    private static final String BASE_URL = "http://115.85.182.213/";
+    private static final String BASE_URL = "http://210.107.198.215/"; //localhost TEST 실행 후 되면 지우기
+    //private static final String BASE_URL = "http://115.85.182.213/";
     private static Retrofit retrofit;
 
     public static Retrofit getApiClient(){

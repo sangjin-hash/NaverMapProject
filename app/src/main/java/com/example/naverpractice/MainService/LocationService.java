@@ -13,6 +13,7 @@ import android.view.SurfaceView;
 import androidx.annotation.NonNull;
 
 import com.example.naverpractice.MainActivity;
+import com.example.naverpractice.MainService.Astar.AstarTest;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -66,6 +67,7 @@ public class LocationService extends SurfaceView implements SurfaceHolder.Callba
         private WhichNode whichNode;
         private TransformCoordinate transformCoordinate;
         private RecordNode recordNode;
+        private AstarTest astarTest;
 
         private int node;
         private boolean isDraw;
@@ -110,6 +112,8 @@ public class LocationService extends SurfaceView implements SurfaceHolder.Callba
                                 previous.add(0, pn);
                             }
                         }
+                        //previous.get(0) 에 x,y,node가 있다.
+                        astarTest = new AstarTest(previous.get(0).getNode());
                         canvas.drawCircle(previous.get(0).getX(), previous.get(0).getY(), 15.0f, paint);
                     }
                     holder.unlockCanvasAndPost(canvas);
@@ -126,6 +130,7 @@ public class LocationService extends SurfaceView implements SurfaceHolder.Callba
 
         public int GpsToImageX(double longitude) {
             final double lon1 = 127.04489156;    //Image 최상단 경도
+            
             final double lon2 = 127.04349;       //Image 최하단 경도
             final double width1 = 17;         //Image 최상단 너비 = ImageView의 x 좌표
             final double width2 = 1057;        //Image 최하단 너비 = ImageView의 x 좌표
