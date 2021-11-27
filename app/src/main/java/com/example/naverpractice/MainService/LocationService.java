@@ -4,9 +4,11 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.Path;
 import android.graphics.PixelFormat;
 import android.graphics.PorterDuff;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
@@ -61,6 +63,7 @@ public class LocationService extends SurfaceView implements SurfaceHolder.Callba
     class RenderingThread extends Thread {
         private SurfaceHolder holder;
         private Paint paint;
+        private Paint paint_recommend;
         private Canvas canvas;
         private double latitude, longitude;
 
@@ -79,6 +82,11 @@ public class LocationService extends SurfaceView implements SurfaceHolder.Callba
             holder.setFormat(PixelFormat.TRANSPARENT);
             paint = new Paint();
             paint.setColor(Color.GREEN);
+
+            paint_recommend = new Paint();
+            paint_recommend.setColor(Color.BLUE);
+            paint_recommend.setStyle(Paint.Style.FILL);
+            paint_recommend.setStrokeWidth(10f);
 
             EventBus.getDefault().register(this);
             whichNode = new WhichNode();
@@ -112,9 +120,12 @@ public class LocationService extends SurfaceView implements SurfaceHolder.Callba
                                 previous.add(0, pn);
                             }
                         }
-                        //previous.get(0) 에 x,y,node가 있다.
-                        astarTest = new AstarTest(previous.get(0).getNode());
+                        astarTest = new AstarTest(previous.get(0).getX(), previous.get(0).getY() ,previous.get(0).getNode());
                         canvas.drawCircle(previous.get(0).getX(), previous.get(0).getY(), 15.0f, paint);
+
+                        //해결해야 하는 문제 : path 여기서 isEmpty() = true로 나옴. => 즉 get_Path()해도 빈 객체가 넘어온다는 뜻이다.
+                        Path path = astarTest.get_Path();
+                        canvas.drawPath(path, paint_recommend);
                     }
                     holder.unlockCanvasAndPost(canvas);
                 }

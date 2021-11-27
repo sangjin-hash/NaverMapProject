@@ -2,12 +2,13 @@ package com.example.naverpractice.MainService.Astar;
 
 //Search Area
 //      0   1   2   3   4   5   6   7
-// 0    -   -   -   -   -   D   -   B
+// 0    -   -   -   -   -   -   -   B
 // 1    -   B   B   B   -   B   -   B
 // 2    -   -   -   -   -   -   -   -
 // 3    B   B   -   B   -   B   -   B
 // 4    B   B   -   -   -   -   -   B
 
+import android.graphics.Path;
 import android.util.Log;
 
 import com.example.naverpractice.network.ApiClient;
@@ -27,8 +28,14 @@ public class AstarTest {
 
     private int recommend_node;
     private int node;
-    public AstarTest(int node){
+    private int x, y;
+    private Path recommend_path;
+
+    public AstarTest(int x, int y, int node){
+        this.x = x;
+        this.y = y;
         this.node = node;
+        recommend_path = new Path();
         recommend(node);
     }
 
@@ -66,8 +73,70 @@ public class AstarTest {
                 blocksArray.add(new Integer[]{4,7});
 
                 aStar.setBlocks(blocksArray);
-                List<Node> path = aStar.findPath();
-                for(Node node : path) {
+                List<Node> node_list = aStar.findPath();
+
+                Path path = new Path();
+
+                path.moveTo(x,y);
+                path.lineTo(x,y);
+
+                if(node_list.size() > 1){
+                    for(int i = 0; i<node_list.size(); i++){
+                        if(i == node_list.size()-1) break;
+
+                        int row = node_list.get(i+1).getRow() - node_list.get(i).getRow();
+                        int col = node_list.get(i+1).getCol() - node_list.get(i).getCol();
+
+                        if(row == 0 && col > 0){
+                            // Motion Vector : ->
+                            int next_node_Row = node_list.get(i+1).getRow();
+                            int next_node_Col = node_list.get(i+1).getCol();
+
+                            int[][][] coordinate = node_list.get(i+1).getCoordinate();
+                            int x = coordinate[next_node_Row][next_node_Col][0];
+                            int y = coordinate[next_node_Row][next_node_Col][1];
+                            Log.e("NEXT NODE 테스트", "X = " + x + " Y = "+ y);
+
+                            path.lineTo(x,y);
+                        }else if(row == 0 && col < 0){
+                            // Motion Vector : <-
+                            int next_node_Row = node_list.get(i+1).getRow();
+                            int next_node_Col = node_list.get(i+1).getCol();
+
+                            int[][][] coordinate = node_list.get(i+1).getCoordinate();
+                            int x = coordinate[next_node_Row][next_node_Col][0];
+                            int y = coordinate[next_node_Row][next_node_Col][1];
+                            Log.e("NEXT NODE 테스트", "X = " + x + " Y = "+ y);
+
+                            path.lineTo(x,y);
+                        }else if(row < 0 && col == 0){
+                            // Motion Vector : up
+                            int next_node_Row = node_list.get(i+1).getRow();
+                            int next_node_Col = node_list.get(i+1).getCol();
+
+                            int[][][] coordinate = node_list.get(i+1).getCoordinate();
+                            int x = coordinate[next_node_Row][next_node_Col][0];
+                            int y = coordinate[next_node_Row][next_node_Col][1];
+                            Log.e("NEXT NODE 테스트", "X = " + x + " Y = "+ y);
+
+                            path.lineTo(x,y);
+                        }else if(row > 0 && col == 0){
+                            // Motion Vector : down
+                            int next_node_Row = node_list.get(i+1).getRow();
+                            int next_node_Col = node_list.get(i+1).getCol();
+
+                            int[][][] coordinate = node_list.get(i+1).getCoordinate();
+                            int x = coordinate[next_node_Row][next_node_Col][0];
+                            int y = coordinate[next_node_Row][next_node_Col][1];
+                            Log.e("NEXT NODE 테스트", "X = " + x + " Y = "+ y);
+
+                            path.lineTo(x,y);
+                        }else break;
+                    }
+                    set_Path(path);
+                }
+
+                for(Node node : node_list) {
                     Log.d("TEST", ""+node.toString());
                 }
             }
@@ -77,6 +146,14 @@ public class AstarTest {
                 Log.e("[RECOMMEND]", t.getMessage());
             }
         });
+    }
+
+    public void set_Path(Path recommend_path){
+        this.recommend_path = recommend_path;
+    }
+
+    public Path get_Path(){
+        return recommend_path;
     }
 
     public Node coordinateToNode(int node){
@@ -179,12 +256,12 @@ public class AstarTest {
         else if(138<= seat_num && seat_num <= 142){
             recommend_node = 22;
             recommend_row = 4;
-            recommend_col = 2;
+            recommend_col = 3;
         }
         else if((143 <= seat_num && seat_num <= 161) || (162 <= seat_num && seat_num <= 179)){
             recommend_node = 24;
             recommend_row = 4;
-            recommend_col = 4;
+            recommend_col = 5;
         }
         Node finalNode = new Node(recommend_row, recommend_col);
         return finalNode;

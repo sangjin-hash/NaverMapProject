@@ -10,10 +10,19 @@ public class Node {
     private boolean isBlock;
     private Node parent;
 
+    private int[][][] coordinate;
+
     public Node(int row, int col) {
         super();
         this.row = row;
         this.col = col;
+        coordinate = new int[][][]{
+                {{40, 275}, {109, 275}, {190, 275}, {282,275},  {385, 275}, {652, 275}, {908, 275}, {-1,-1}},
+                {{40, 450},  {-1, -1},    {-1,-1},    {-1,-1},  {385, 450}, {-1, -1},   {908, 450}, {-1, -1}},
+                {{40,623},  {109, 623}, {190, 623}, {282,623},  {385,623}, {652,623},  {908,623},  {1000,623}},
+                {{-1, -1},  {-1, -1},  {190, 795},  {-1, -1},   {385,795}, {-1, -1},   {908, 795},  {-1, -1}},
+                {{-1, -1},  {-1, -1},  {190, 970},  {282, 970}, {385,970}, {652, 970},   {908, 970},  {-1, -1}}
+        };
     }
 
     public void calculateHeuristic(Node finalNode) {
@@ -106,5 +115,9 @@ public class Node {
 
     public void setCol(int col) {
         this.col = col;
+    }
+
+    public int[][][] getCoordinate() {
+        return coordinate;
     }
 }
