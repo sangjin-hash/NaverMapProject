@@ -7,6 +7,8 @@ import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.PixelFormat;
 import android.graphics.PorterDuff;
+import android.os.Handler;
+import android.os.Message;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.SurfaceHolder;
@@ -60,7 +62,7 @@ public class LocationService extends SurfaceView implements SurfaceHolder.Callba
 
     }
 
-    class RenderingThread extends Thread {
+    public class RenderingThread extends Thread {
         private SurfaceHolder holder;
         private Paint paint;
         private Paint paint_recommend;
@@ -76,7 +78,6 @@ public class LocationService extends SurfaceView implements SurfaceHolder.Callba
         private boolean isDraw;
         private ArrayList<PreviousNode> previous = new ArrayList<PreviousNode>();
 
-
         public RenderingThread(SurfaceHolder holder) {
             this.holder = holder;
             holder.setFormat(PixelFormat.TRANSPARENT);
@@ -85,7 +86,7 @@ public class LocationService extends SurfaceView implements SurfaceHolder.Callba
 
             paint_recommend = new Paint();
             paint_recommend.setColor(Color.BLUE);
-            paint_recommend.setStyle(Paint.Style.FILL);
+            paint_recommend.setStyle(Paint.Style.STROKE);
             paint_recommend.setStrokeWidth(10f);
 
             EventBus.getDefault().register(this);
@@ -107,25 +108,37 @@ public class LocationService extends SurfaceView implements SurfaceHolder.Callba
 
                     if (node != -1) {
                         isDraw = recordNode.record(node);
-                        if(isDraw){
+                        if (isDraw) {
                             transformCoordinate.transForm(temp_transformX, temp_transformY, node);
                             int transformX = transformCoordinate.getTransformX();
                             int transformY = transformCoordinate.getTransformY();
-                            if(previous.size() == 0){
+                            if (previous.size() == 0) {
                                 PreviousNode pn = new PreviousNode(transformX, transformY, node);
                                 previous.add(0, pn);
-                            }else{
+                            } else {
                                 previous.remove(0);
                                 PreviousNode pn = new PreviousNode(transformX, transformY, node);
                                 previous.add(0, pn);
                             }
                         }
-                        astarTest = new AstarTest(previous.get(0).getX(), previous.get(0).getY() ,previous.get(0).getNode());
                         canvas.drawCircle(previous.get(0).getX(), previous.get(0).getY(), 15.0f, paint);
 
-                        //해결해야 하는 문제 : path 여기서 isEmpty() = true로 나옴. => 즉 get_Path()해도 빈 객체가 넘어온다는 뜻이다.
-                        Path path = astarTest.get_Path();
-                        canvas.drawPath(path, paint_recommend);
+                        astarTest = new AstarTest(previous.get(0).getX(), previous.get(0).getY(), previous.get(0).getNode());
+                        astarTest.start();
+
+
+                        ArrayList<Integer[]> recommend = astarTest.path;
+                        Path recommend_path = new Path();
+                        for (int i = 0; i < recommend.size(); i++) {
+                            Integer[] coordinate = recommend.get(i);
+                            int x = coordinate[0];
+                            int y = coordinate[1];
+
+                            if (i == 0) recommend_path.moveTo(x, y);
+                            else recommend_path.lineTo(x, y);
+                        }
+                        canvas.drawPath(recommend_path, paint_recommend);
+                        astarTest.path.clear();
                     }
                     holder.unlockCanvasAndPost(canvas);
                 }
@@ -141,7 +154,7 @@ public class LocationService extends SurfaceView implements SurfaceHolder.Callba
 
         public int GpsToImageX(double longitude) {
             final double lon1 = 127.04489156;    //Image 최상단 경도
-            
+
             final double lon2 = 127.04349;       //Image 최하단 경도
             final double width1 = 17;         //Image 최상단 너비 = ImageView의 x 좌표
             final double width2 = 1057;        //Image 최하단 너비 = ImageView의 x 좌표
