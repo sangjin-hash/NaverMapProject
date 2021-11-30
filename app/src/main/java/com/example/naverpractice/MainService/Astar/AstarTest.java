@@ -116,8 +116,67 @@ public class AstarTest extends Thread {
                         } else break;
                     }
                 }
+                if(AstarNetwork.recommend_seat_num != -1){
+                    Integer[] final_coordinate =  DestCoordindate(AstarNetwork.recommend_seat_num);
+                    Integer[] temp_final = path.get(path.size()-1);
+                    int temp_final_Y = temp_final[1];
+                    Integer[] coordinate = {final_coordinate[0], temp_final_Y};
+                    path.set(path.size()-1, coordinate);
+                    path.add(final_coordinate);
+                }
             }
         }
+    }
+
+    public Integer[] DestCoordindate(int num){
+        Integer[] array = null;
+        int x = 0;
+        int y = 0;
+        if (0 <= num && num <= 14) {
+            x = 29 + (num * 23);
+            y = 240;
+        } else if (15 <= num && num <= 38) {
+            x = 430 + (num - 15) * 23;
+            y = 240;
+        } else if (39 <= num && num <= 50) {
+            x = 75 + (num - 39) * 23;
+            y = 315;
+        } else if (51 <= num && num <= 69) {
+            x = 444 + (num - 51) * 23;
+            y = 315;
+        } else if (70 <= num && num <= 81) {
+            x = 75 + (num - 70) * 23;
+            y = 585;
+        } else if (82 <= num && num <= 100) {
+            x = 444 + (num - 82) * 23;
+            y = 585;
+        } else if (101 <= num && num <= 105) {
+            x = 954 + (num - 101) * 23;
+            y = 585;
+        } else if (106 <= num && num <= 110) {
+            x = 52 + (num - 106) * 23;
+            y = 660;
+        } else if (111 <= num && num <= 115) {
+            x = 236 + (num - 111) * 23;
+            y = 660;
+        } else if (116 <= num && num <= 134) {
+            x = 444 + (num - 116) * 23;
+            y = 660;
+        } else if (135 <= num && num <= 137) {
+            x = 954 + (num - 135) * 23;
+            y = 660;
+        } else if (138 <= num && num <= 142) {
+            x = 236 + (num - 138) * 23;
+            y = 930;
+        } else if (143 <= num && num <= 161) {
+            x = 444 + (num - 143) * 23;
+            y = 930;
+        } else if (162 <= num && num <= 179) {
+            x = 444 + (num - 162) * 23;
+            y = 1010;
+        }
+        array = new Integer[]{x,y};
+        return array;
     }
 
 
