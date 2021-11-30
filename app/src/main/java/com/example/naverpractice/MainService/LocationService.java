@@ -17,7 +17,9 @@ import android.view.SurfaceView;
 import androidx.annotation.NonNull;
 
 import com.example.naverpractice.MainActivity;
+import com.example.naverpractice.MainService.Astar.AstarNetwork;
 import com.example.naverpractice.MainService.Astar.AstarTest;
+import com.naver.maps.map.overlay.PathOverlay;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -78,6 +80,10 @@ public class LocationService extends SurfaceView implements SurfaceHolder.Callba
         private boolean isDraw;
         private ArrayList<PreviousNode> previous = new ArrayList<PreviousNode>();
 
+        private Path recommend_path;
+
+        private AstarNetwork astarNetwork;
+
         public RenderingThread(SurfaceHolder holder) {
             this.holder = holder;
             holder.setFormat(PixelFormat.TRANSPARENT);
@@ -89,10 +95,15 @@ public class LocationService extends SurfaceView implements SurfaceHolder.Callba
             paint_recommend.setStyle(Paint.Style.STROKE);
             paint_recommend.setStrokeWidth(10f);
 
+            recommend_path = new Path();
+
             EventBus.getDefault().register(this);
             whichNode = new WhichNode();
             transformCoordinate = new TransformCoordinate();
             recordNode = new RecordNode();
+
+            astarNetwork = new AstarNetwork();
+            astarNetwork.start();
         }
 
         @Override
@@ -126,9 +137,13 @@ public class LocationService extends SurfaceView implements SurfaceHolder.Callba
                         astarTest = new AstarTest(previous.get(0).getX(), previous.get(0).getY(), previous.get(0).getNode());
                         astarTest.start();
 
+                        try {
+                            astarTest.join();
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
 
                         ArrayList<Integer[]> recommend = astarTest.path;
-                        Path recommend_path = new Path();
                         for (int i = 0; i < recommend.size(); i++) {
                             Integer[] coordinate = recommend.get(i);
                             int x = coordinate[0];
@@ -138,6 +153,7 @@ public class LocationService extends SurfaceView implements SurfaceHolder.Callba
                             else recommend_path.lineTo(x, y);
                         }
                         canvas.drawPath(recommend_path, paint_recommend);
+                        recommend_path.reset();
                         astarTest.path.clear();
                     }
                     holder.unlockCanvasAndPost(canvas);
@@ -145,7 +161,6 @@ public class LocationService extends SurfaceView implements SurfaceHolder.Callba
             }
         }
 
-        //EventBus에서 보낸 이벤트를 수신하는 콜백 메서드
         @Subscribe
         public void onLocationEvent(MainServiceActvity.LocationEvent event) {
             latitude = event.latitude;
