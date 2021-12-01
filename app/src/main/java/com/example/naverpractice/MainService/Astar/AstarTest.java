@@ -116,6 +116,15 @@ public class AstarTest extends Thread {
                         } else break;
                     }
                 }
+                else{
+                    int row = node_list.get(0).getRow();
+                    int col = node_list.get(0).getCol();
+
+                    int [][][] coordinate = node_list.get(0).getCoordinate();
+                    int x = coordinate[row][col][0];
+                    int y = coordinate[row][col][1];
+                    path.add(new Integer[]{x,y});
+                }
                 if(AstarNetwork.recommend_seat_num != -1){
                     Integer[] final_coordinate =  DestCoordindate(AstarNetwork.recommend_seat_num);
                     Integer[] temp_final = path.get(path.size()-1);
@@ -136,7 +145,7 @@ public class AstarTest extends Thread {
             x = 29 + (num * 23);
             y = 240;
         } else if (15 <= num && num <= 38) {
-            x = 430 + (num - 15) * 23;
+            x = 420 + (num - 15) * 23;
             y = 240;
         } else if (39 <= num && num <= 50) {
             x = 75 + (num - 39) * 23;
