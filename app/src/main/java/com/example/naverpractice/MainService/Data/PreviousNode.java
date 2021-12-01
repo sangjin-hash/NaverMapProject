@@ -1,4 +1,4 @@
-package com.example.naverpractice.MainService;
+package com.example.naverpractice.MainService.Data;
 
 public class PreviousNode {
     int x, y , node;

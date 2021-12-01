@@ -8,7 +8,6 @@ import android.graphics.Path;
 import android.graphics.PixelFormat;
 import android.graphics.PorterDuff;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
@@ -16,19 +15,16 @@ import androidx.annotation.NonNull;
 
 import com.example.naverpractice.MainService.Astar.AstarNetwork;
 import com.example.naverpractice.MainService.Astar.AstarTest;
-import com.example.naverpractice.network.ApiClient;
-import com.example.naverpractice.network.ApiInterface;
-import com.example.naverpractice.network.Density;
+import com.example.naverpractice.MainService.Data.PreviousNode;
+import com.example.naverpractice.MainService.Data.RecordNode;
+import com.example.naverpractice.MainService.Data.TransformCoordinate;
+import com.example.naverpractice.MainService.Data.WhichNode;
+import com.example.naverpractice.MainService.Density.DensityService;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
 import java.util.ArrayList;
-import java.util.List;
-
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 public class LocationService extends SurfaceView implements SurfaceHolder.Callback {
     private static final String TAG = "[LocationService]";
