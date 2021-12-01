@@ -11,4 +11,7 @@ public interface ApiInterface {
 
     @GET("recommend.php")
     Call<List<RecommendSeat>> getNum();
+
+    @GET("density.php")
+    Call<List<Density>> getDensity();
 }

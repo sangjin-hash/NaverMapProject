@@ -7,8 +7,6 @@ import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.PixelFormat;
 import android.graphics.PorterDuff;
-import android.os.Handler;
-import android.os.Message;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.SurfaceHolder;
@@ -16,15 +14,21 @@ import android.view.SurfaceView;
 
 import androidx.annotation.NonNull;
 
-import com.example.naverpractice.MainActivity;
 import com.example.naverpractice.MainService.Astar.AstarNetwork;
 import com.example.naverpractice.MainService.Astar.AstarTest;
-import com.naver.maps.map.overlay.PathOverlay;
+import com.example.naverpractice.network.ApiClient;
+import com.example.naverpractice.network.ApiInterface;
+import com.example.naverpractice.network.Density;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
 import java.util.ArrayList;
+import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class LocationService extends SurfaceView implements SurfaceHolder.Callback {
     private static final String TAG = "[LocationService]";
@@ -68,6 +72,7 @@ public class LocationService extends SurfaceView implements SurfaceHolder.Callba
         private SurfaceHolder holder;
         private Paint paint;
         private Paint paint_recommend;
+        private Paint paint_density;
         private Canvas canvas;
         private double latitude, longitude;
 
@@ -75,6 +80,7 @@ public class LocationService extends SurfaceView implements SurfaceHolder.Callba
         private TransformCoordinate transformCoordinate;
         private RecordNode recordNode;
         private AstarTest astarTest;
+        private DensityService density;
 
         private int node;
         private boolean isDraw;
@@ -97,6 +103,11 @@ public class LocationService extends SurfaceView implements SurfaceHolder.Callba
 
             recommend_path = new Path();
 
+            paint_density = new Paint();
+            paint_density.setColor(Color.BLUE);
+            paint_density.setStyle(Paint.Style.STROKE);
+            paint_density.setStrokeWidth(5f);
+
             EventBus.getDefault().register(this);
             whichNode = new WhichNode();
             transformCoordinate = new TransformCoordinate();
@@ -104,6 +115,9 @@ public class LocationService extends SurfaceView implements SurfaceHolder.Callba
 
             astarNetwork = new AstarNetwork();
             astarNetwork.start();
+
+            density = new DensityService();
+            density.start();
         }
 
         @Override
@@ -111,7 +125,7 @@ public class LocationService extends SurfaceView implements SurfaceHolder.Callba
             while (true) {
                 if (latitude != 0 && longitude != 0) {
                     canvas = holder.lockCanvas();
-                    canvas.drawColor(Color.TRANSPARENT, PorterDuff.Mode.CLEAR);
+                    canvas.drawColor(Color.TRANSPARENT, PorterDuff.Mode.CLEAR);     //가끔 이쪽에서 오류나서 튕김 -> NullPointerException 발생 Canvas.drawcalor -> null object
                     int temp_transformX = GpsToImageX(longitude);
                     int temp_transformY = GpsToImageY(latitude);
 
@@ -134,6 +148,7 @@ public class LocationService extends SurfaceView implements SurfaceHolder.Callba
                         }
                         canvas.drawCircle(previous.get(0).getX(), previous.get(0).getY(), 15.0f, paint);
 
+                        /*Service 1
                         astarTest = new AstarTest(previous.get(0).getX(), previous.get(0).getY(), previous.get(0).getNode());
                         astarTest.start();
 
@@ -154,7 +169,14 @@ public class LocationService extends SurfaceView implements SurfaceHolder.Callba
                         }
                         canvas.drawPath(recommend_path, paint_recommend);
                         recommend_path.reset();
-                        astarTest.path.clear();
+                        astarTest.path.clear();*/
+
+                        //Service 2
+                        for (int i = 0; i < DensityService.list.size(); i++) {
+                            int left = DensityService.list.get(i)[0];
+                            int top = DensityService.list.get(i)[1];
+                            canvas.drawRect(left, top, left + 23, top + 90, paint_recommend);
+                        }
                     }
                     holder.unlockCanvasAndPost(canvas);
                 }
@@ -169,7 +191,6 @@ public class LocationService extends SurfaceView implements SurfaceHolder.Callba
 
         public int GpsToImageX(double longitude) {
             final double lon1 = 127.04489156;    //Image 최상단 경도
-
             final double lon2 = 127.04349;       //Image 최하단 경도
             final double width1 = 17;         //Image 최상단 너비 = ImageView의 x 좌표
             final double width2 = 1057;        //Image 최하단 너비 = ImageView의 x 좌표
