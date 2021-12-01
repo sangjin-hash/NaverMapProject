@@ -25,6 +25,7 @@ import org.greenrobot.eventbus.EventBus;
 public class MainServiceActvity extends AppCompatActivity {
     private static final String TAG = "[MAIN SERVICE]";
     LocationListener gpsLocationListener;
+    private EventBusProvider provider;
     private double latitude, longitude;
     private int flag;
 
@@ -33,6 +34,7 @@ public class MainServiceActvity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.parking_lot_activity);
 
+        provider = new EventBusProvider();
 
         final LocationManager lm = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         gpsLocationListener = new LocationListener() {
@@ -41,10 +43,9 @@ public class MainServiceActvity extends AppCompatActivity {
                 latitude = location.getLatitude();
                 longitude = location.getLongitude();
 
-                LocationEvent event1 = new LocationEvent();
-                event1.latitude = latitude;
-                event1.longitude = longitude;
-                EventBus.getDefault().post(event1);
+                provider.latitude = latitude;
+                provider.longitude = longitude;
+                EventBus.getDefault().post(provider);
             }
         };
 
@@ -66,18 +67,25 @@ public class MainServiceActvity extends AppCompatActivity {
         switch(view.getId()){
             case R.id.near_park:
                 if(checked) flag = 1;
+                provider.flag = flag;
+                EventBus.getDefault().post(provider);
                 break;
             case R.id.empty_around:
                 if(checked) flag = 2;
+                provider.flag = flag;
+                EventBus.getDefault().post(provider);
                 break;
             case R.id.no_service:
                 if(checked) flag = 3;
+                provider.flag = flag;
+                EventBus.getDefault().post(provider);
                 break;
         }
 
     }
 
-    public static class LocationEvent{
+    public static class EventBusProvider{
         double latitude, longitude;
+        int flag;
     }
 }

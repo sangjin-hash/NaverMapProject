@@ -13,16 +13,16 @@
         android:layout_gravity="center">
 
         <RadioButton
-            android:id = "@+id/near_park"
+            android:id="@+id/near_park"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text = "가까운 곳 주차하기             "
-            android:textSize = "30sp"
-            android:textColor = "@drawable/selector_radio_text"
-            android:background="@drawable/selector_radio_button"
             android:layout_gravity="left"
             android:layout_marginLeft="10dp"
-            android:onClick="onRadioButtonClicked"/>
+            android:background="@drawable/selector_radio_button"
+            android:onClick="onRadioButtonClicked"
+            android:text="가까운 곳 주차하기             "
+            android:textColor="@drawable/selector_radio_text"
+            android:textSize="30sp" />
 
         <RadioButton
             android:id="@+id/empty_around"
@@ -45,6 +45,7 @@
             android:textColor = "@drawable/selector_radio_text"
             android:background="@drawable/selector_radio_button"
             android:layout_gravity="left"
+            android:checked="true"
             android:layout_marginLeft="10dp"
             android:onClick="onRadioButtonClicked"/>
     </RadioGroup>

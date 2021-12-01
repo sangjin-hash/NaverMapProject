@@ -8,6 +8,7 @@ import android.graphics.Path;
 import android.graphics.PixelFormat;
 import android.graphics.PorterDuff;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
@@ -71,6 +72,7 @@ public class LocationService extends SurfaceView implements SurfaceHolder.Callba
         private Paint paint_density;
         private Canvas canvas;
         private double latitude, longitude;
+        private int flag;
 
         private WhichNode whichNode;
         private TransformCoordinate transformCoordinate;
@@ -144,34 +146,40 @@ public class LocationService extends SurfaceView implements SurfaceHolder.Callba
                         }
                         canvas.drawCircle(previous.get(0).getX(), previous.get(0).getY(), 15.0f, paint);
 
-                        /*Service 1
-                        astarTest = new AstarTest(previous.get(0).getX(), previous.get(0).getY(), previous.get(0).getNode());
-                        astarTest.start();
+                        Log.e(TAG, "전달받은 FLAG = " + flag);
+                        switch(flag){
+                            case 1:
+                                astarTest = new AstarTest(previous.get(0).getX(), previous.get(0).getY(), previous.get(0).getNode());
+                                astarTest.start();
 
-                        try {
-                            astarTest.join();
-                        } catch (InterruptedException e) {
-                            e.printStackTrace();
-                        }
+                                try {
+                                    astarTest.join();
+                                } catch (InterruptedException e) {
+                                    e.printStackTrace();
+                                }
 
-                        ArrayList<Integer[]> recommend = astarTest.path;
-                        for (int i = 0; i < recommend.size(); i++) {
-                            Integer[] coordinate = recommend.get(i);
-                            int x = coordinate[0];
-                            int y = coordinate[1];
+                                ArrayList<Integer[]> recommend = astarTest.path;
+                                for (int i = 0; i < recommend.size(); i++) {
+                                    Integer[] coordinate = recommend.get(i);
+                                    int x = coordinate[0];
+                                    int y = coordinate[1];
 
-                            if (i == 0) recommend_path.moveTo(x, y);
-                            else recommend_path.lineTo(x, y);
-                        }
-                        canvas.drawPath(recommend_path, paint_recommend);
-                        recommend_path.reset();
-                        astarTest.path.clear();*/
-
-                        //Service 2
-                        for (int i = 0; i < DensityService.list.size(); i++) {
-                            int left = DensityService.list.get(i)[0];
-                            int top = DensityService.list.get(i)[1];
-                            canvas.drawRect(left, top, left + 23, top + 90, paint_recommend);
+                                    if (i == 0) recommend_path.moveTo(x, y);
+                                    else recommend_path.lineTo(x, y);
+                                }
+                                canvas.drawPath(recommend_path, paint_recommend);
+                                recommend_path.reset();
+                                astarTest.path.clear();
+                                break;
+                            case 2:
+                                for (int i = 0; i < DensityService.list.size(); i++) {
+                                    int left = DensityService.list.get(i)[0];
+                                    int top = DensityService.list.get(i)[1];
+                                    canvas.drawRect(left, top, left + 23, top + 90, paint_recommend);
+                                }
+                                break;
+                            case 3:
+                                break;
                         }
                     }
                     holder.unlockCanvasAndPost(canvas);
@@ -180,9 +188,10 @@ public class LocationService extends SurfaceView implements SurfaceHolder.Callba
         }
 
         @Subscribe
-        public void onLocationEvent(MainServiceActvity.LocationEvent event) {
+        public void onLocationEvent(MainServiceActvity.EventBusProvider event) {
             latitude = event.latitude;
             longitude = event.longitude;
+            flag = event.flag;
         }
 
         public int GpsToImageX(double longitude) {
