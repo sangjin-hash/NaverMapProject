@@ -17,7 +17,9 @@ import com.example.naverpractice.network.ApiInterface;
 import com.example.naverpractice.network.RecommendSeat;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Queue;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -29,6 +31,7 @@ public class AstarTest extends Thread {
     private int recommend_node;
     private int node;
     private int x, y;
+
     public static ArrayList<Integer[]> path = new ArrayList<>();
 
     public AstarTest(int x, int y, int node) {
