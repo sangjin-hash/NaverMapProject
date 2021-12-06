@@ -13,12 +13,11 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Build;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.RadioButton;
 
 import com.example.naverpractice.R;
-import com.example.naverpractice.databinding.ActivityMainBinding;
+
 
 import org.greenrobot.eventbus.EventBus;
 

@@ -5,7 +5,7 @@ import com.google.gson.annotations.SerializedName;
 
 public class Density {
     @Expose
-    @SerializedName("num") private int seatNo;
+    @SerializedName("seatNo") private int seatNo;
 
     @Expose
     @SerializedName("left") private int left;

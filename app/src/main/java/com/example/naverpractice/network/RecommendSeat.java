@@ -5,7 +5,7 @@ import com.google.gson.annotations.SerializedName;
 
 public class RecommendSeat {
     @Expose
-    @SerializedName("num") private int num;
+    @SerializedName("seatNo") private int num;
 
     public int getNum() {
         return num;

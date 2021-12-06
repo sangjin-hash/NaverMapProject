@@ -5,10 +5,10 @@ import com.google.gson.annotations.SerializedName;
 
 public class ParkingLot {
     @Expose
-    @SerializedName("id") private int id;
+    @SerializedName("seatNo") private int id;
 
     @Expose
-    @SerializedName("isEmpty") private String isEmpty;
+    @SerializedName("isEmpty") private int isEmpty;
 
     public int getId() {
         return id;
@@ -18,11 +18,11 @@ public class ParkingLot {
         this.id = id;
     }
 
-    public String getIsEmpty() {
+    public int getIsEmpty() {
         return isEmpty;
     }
 
-    public void setIsEmpty(String isEmpty) {
+    public void setIsEmpty(int isEmpty) {
         this.isEmpty = isEmpty;
     }
 }

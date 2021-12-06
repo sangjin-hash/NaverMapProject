@@ -53,8 +53,9 @@ public class InformationFragment extends Fragment {
                     @Override
                     public void onResponse(Call<List<ParkingLot>> call, Response<List<ParkingLot>> response) {
                         for(int i = 0; i<SECTION_SIZE;i++){
-                            String result = response.body().get(i).getIsEmpty();
-                            if(Boolean.parseBoolean(result)){
+                            int result = response.body().get(i).getIsEmpty();
+                            boolean re = result == 1 ? true : false;
+                            if(re){
                                 empty_seat++;
                             };
                         }

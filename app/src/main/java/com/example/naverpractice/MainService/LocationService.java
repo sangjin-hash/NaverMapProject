@@ -8,7 +8,6 @@ import android.graphics.Path;
 import android.graphics.PixelFormat;
 import android.graphics.PorterDuff;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
@@ -26,9 +25,6 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
 import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Queue;
 
 public class LocationService extends SurfaceView implements SurfaceHolder.Callback {
     private static final String TAG = "[LocationService]";
@@ -126,7 +122,7 @@ public class LocationService extends SurfaceView implements SurfaceHolder.Callba
             while (true) {
                 if (latitude != 0 && longitude != 0) {
                     canvas = holder.lockCanvas();
-                    canvas.drawColor(Color.TRANSPARENT, PorterDuff.Mode.CLEAR);     //가끔 이쪽에서 오류나서 튕김 -> NullPointerException 발생 Canvas.drawcalor -> null object
+                    canvas.drawColor(Color.TRANSPARENT, PorterDuff.Mode.CLEAR);
                     int temp_transformX = GpsToImageX(longitude);
                     int temp_transformY = GpsToImageY(latitude);
 

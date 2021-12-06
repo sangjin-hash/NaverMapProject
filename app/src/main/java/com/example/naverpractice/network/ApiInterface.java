@@ -6,12 +6,12 @@ import retrofit2.Call;
 import retrofit2.http.GET;
 
 public interface ApiInterface {
-    @GET("select.php")
+    @GET("seat.php")
     Call<List<ParkingLot>> getEmpty();
 
-    @GET("recommend.php")
+    @GET("distance.php")
     Call<List<RecommendSeat>> getNum();
 
-    @GET("density.php")
+    @GET("select.php")
     Call<List<Density>> getDensity();
 }
