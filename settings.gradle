@@ -1,2 +1,3 @@
 rootProject.name = "NaverPractice"
 include ':app'
+include ':Trackingtest'

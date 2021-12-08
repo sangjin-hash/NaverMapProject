@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainService.MainServiceActivity">
+
+
+    <FrameLayout
+        android:id="@+id/layout"
+        android:layout_width="wrap_content"
+        android:layout_height= "480dp"
+        android:layout_centerInParent="true">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="480dp"
+            android:src="@drawable/parkinglot"/>
+
+        <com.example.trackingtest.MainService.LocationService
+            android:id="@+id/surfaceView"
+            android:layout_width="match_parent"
+            android:layout_height="480dp"/>
+
+    </FrameLayout>
+</RelativeLayout>
