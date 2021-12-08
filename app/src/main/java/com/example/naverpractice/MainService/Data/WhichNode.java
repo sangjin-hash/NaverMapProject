@@ -42,11 +42,12 @@ public class WhichNode {
         else if(155 < transformX && transformX <= 224 && 660 < transformY && transformY <= 930) node = 18;
         else if(339 < transformX && transformX <= 431 && 660 < transformY && transformY <= 930) node = 19;
         else if(873 < transformX && transformX <= 942 && 660 < transformY && transformY <= 930) node = 20;
-        else if(155 < transformX && transformX <= 224 && 930 < transformY && transformY <= 1010) node = 21;
-        else if(224 < transformX && transformX <= 339 && 800 < transformY && transformY <= 1010) node = 22;
-        else if(339 < transformX && transformX <= 431 && 930 < transformY && transformY <= 1010) node = 23;
-        else if(431 < transformX && transformX <= 873 && 800 < transformY && transformY <= 1010) node = 24;
-        else if(873 < transformX && transformX <= 942 && 930 < transformY && transformY <= 1010) node = 25;
+        else if(155 < transformX && transformX <= 224 && 930 < transformY && transformY <= 1100) node = 21;
+        else if(224 < transformX && transformX <= 339 && 800 < transformY && transformY <= 1100) node = 22;
+        else if(339 < transformX && transformX <= 431 && 930 < transformY && transformY <= 1100) node = 23;
+        else if(431 < transformX && transformX <= 873 && 800 < transformY && transformY <= 1100) node = 24;
+        else if(873 < transformX && transformX <= 942 && 930 < transformY && transformY <= 1100) node = 25;
         return node;
     }
 }
+

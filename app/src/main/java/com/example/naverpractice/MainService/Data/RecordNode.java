@@ -79,7 +79,7 @@ public class RecordNode {
                     }
                     break;
                 case 9 :
-                    if(record_node == 6 || record_node == 9 || record_node == 15 ||record_node == 16 || record_node == 17){
+                    if(record_node == 5 || record_node == 6 || record_node == 9 || record_node == 15 ||record_node == 16 || record_node == 17){
                         record_node = node;
                         result = true;
                     }
@@ -91,7 +91,7 @@ public class RecordNode {
                     }
                     break;
                 case 11 :
-                    if(record_node == 7 || record_node == 10 || record_node == 11 || record_node == 12){
+                    if(record_node == 7 || record_node == 10 || record_node == 11 || record_node == 12 || record_node == 18){
                         record_node = node;
                         result = true;
                     }
@@ -103,7 +103,7 @@ public class RecordNode {
                     }
                     break;
                 case 13 :
-                    if(record_node == 12 || record_node == 13 || record_node == 14){
+                    if(record_node == 8 || record_node == 12 || record_node == 13 || record_node == 14 || record_node ==18 || record_node == 19){
                         record_node = node;
                         result = true;
                     }
@@ -157,7 +157,7 @@ public class RecordNode {
                     }
                     break;
                 case 22 :
-                    if(record_node == 18 || record_node == 21 || record_node == 22 || record_node == 23 || record_node == 19){
+                    if(record_node == 18 || record_node == 19 || record_node == 21 || record_node == 22 || record_node == 23){
                         record_node = node;
                         result = true;
                     }
@@ -169,7 +169,7 @@ public class RecordNode {
                     }
                     break;
                 case 24 :
-                    if(record_node == 19 || record_node == 23 || record_node == 20 || record_node == 24 || record_node == 25){
+                    if(record_node == 19 || record_node == 20 || record_node == 23 || record_node == 24 || record_node == 25){
                         record_node = node;
                         result = true;
                     }

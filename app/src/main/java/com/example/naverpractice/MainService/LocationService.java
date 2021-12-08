@@ -143,8 +143,6 @@ public class LocationService extends SurfaceView implements SurfaceHolder.Callba
                                 previous.add(0, pn);
                             }
                         }
-                        canvas.drawCircle(previous.get(0).getX(), previous.get(0).getY(), 15.0f, paint);
-
                         switch(flag){
                             case 1:
                                 astarTest = new AstarTest(previous.get(0).getX(), previous.get(0).getY(), previous.get(0).getNode());
@@ -180,6 +178,7 @@ public class LocationService extends SurfaceView implements SurfaceHolder.Callba
                                 break;
                         }
                     }
+                    canvas.drawCircle(previous.get(0).getX(), previous.get(0).getY(), 15.0f, paint);
                     holder.unlockCanvasAndPost(canvas);
                 }
             }
@@ -193,9 +192,9 @@ public class LocationService extends SurfaceView implements SurfaceHolder.Callba
         }
 
         public int GpsToImageX(double longitude) {
-            final double lon1 = 127.04489156;    //Image 최상단 경도
-            final double lon2 = 127.04349;       //Image 최하단 경도
-            final double width1 = 17;         //Image 최상단 너비 = ImageView의 x 좌표
+            final double lon1 = 127.04485156;    //Image 최상단 경도
+            final double lon2 = 127.04353077;       //Image 최하단 경도
+            final double width1 = 30;         //Image 최상단 너비 = ImageView의 x 좌표
             final double width2 = 1057;        //Image 최하단 너비 = ImageView의 x 좌표
 
             // y = a*x + b => Linear transform 2차원 (위도, 경도) => 2차원 (x,y)
@@ -207,10 +206,10 @@ public class LocationService extends SurfaceView implements SurfaceHolder.Callba
         }
 
         public int GpsToImageY(double latitude) {
-            final double lat1 = 37.28461536;    //Image 최상단 위도
+            final double lat1 = 37.28462536;    //Image 최상단 위도
             final double lat2 = 37.28508;       //Image 최하단 위도
-            final double height1 = 150;         //Image 최상단 높이 = ImageView의 y 좌표
-            final double height2 = 1100;        //Image 최하단 높이 = ImageView의 y 좌표
+            final double height1 = 120;         //Image 최상단 높이 = ImageView의 y 좌표
+            final double height2 = 1120;        //Image 최하단 높이 = ImageView의 y 좌표
 
             // y = a*x + b => Linear transform 2차원 (위도, 경도) => 2차원 (x,y)
             double a1 = (height1 - height2) / (lat1 - lat2);
