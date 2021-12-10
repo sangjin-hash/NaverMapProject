@@ -14,14 +14,16 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.NaverPractice">
 
-        <activity android:name=".MainActivity">
+        <activity android:name=".MainActivity"
+            android:launchMode="singleTask">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".ToyNavigation.MapFragmentActivity" />
+        <activity android:name=".ToyNavigation.MapFragmentActivity"
+            android:launchMode="singleTask"/>
         <activity android:name=".MainService.MainServiceActvity" />
 
         <meta-data

@@ -91,7 +91,7 @@ public class MapFragmentActivity extends AppCompatActivity implements OnMapReady
         naverMap.setLayerGroupEnabled(NaverMap.LAYER_GROUP_BUILDING,false);
         naverMap.setLayerGroupEnabled(NaverMap.LAYER_GROUP_TRAFFIC,true);
         naverMap.setMinZoom(14);
-        naverMap.setMaxZoom(16);
+        naverMap.setMaxZoom(18);
 
         //UISetting -> 현 위치 버튼 + zoom View 위치 조정
         UiSettings uiSettings = naverMap.getUiSettings();
@@ -148,8 +148,10 @@ public class MapFragmentActivity extends AppCompatActivity implements OnMapReady
                     Log.d(TAG, "Start Main Service");
                     marker.setMap(null);
 
-                    Intent intent = new Intent(MapFragmentActivity.this, MainServiceActvity.class);
-                    startActivity(intent);
+                    startActivity(new Intent(MapFragmentActivity.this, MainServiceActvity.class)
+                            .setAction(Intent.ACTION_MAIN)
+                            .addCategory(Intent.CATEGORY_LAUNCHER)
+                            .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
                 }
             }
         });
